@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — Prime Elite Ventures</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b1220">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/img/favicon.ico">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="/css/modern-design-system.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/dark-mode.css">
+<link rel="stylesheet" href="/css/premium-design.css">
+</head>
+<body>
+<header class="navbar">
+  <div class="container">
+    <a href="/" class="brand"><span class="mark">PE</span><span class="brand-text"> Prime Elite Ventures</span></a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <i class="fa-solid fa-sun icon-sun"></i>
+      <i class="fa-solid fa-moon icon-moon"></i>
+    </button>
+  </div>
+</header>
+
+<main class="auth-page">
+  <div class="glass-card auth-card">
+    <span class="eyebrow">Client portal</span>
+    <h1>Welcome back</h1>
+    <p>Log in to view your engagement dashboard and messages.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="form-row">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" autocomplete="email" required>
+      </div>
+      <div class="form-row">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary" id="loginSubmit" style="width:100%; justify-content:center">Log in</button>
+      <div class="form-status" id="loginStatus"></div>
+    </form>
+
+    <p class="auth-switch">Don't have an account? <a href="/register">Create one</a></p>
+    <p style="font-size:var(--step--1); color:var(--text-muted); text-align:center; margin-top:.75rem">Staff: use your admin credentials above to reach the admin portal.</p>
+  </div>
+</main>
+
+<script src="/js/theme-manager.js"></script>
+<script src="/js/api.js"></script>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const status = document.getElementById('loginStatus');
+    const btn = document.getElementById('loginSubmit');
+    status.className = 'form-status';
+    btn.disabled = true;
+    btn.textContent = 'Logging in…';
+    try {
+      const { user } = await window.PEVApi.login({
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value,
+      });
+      window.location.href = window.PEVApi.portalPathForRole(user.role);
+    } catch (err) {
+      status.textContent = err.message || 'Login failed.';
+      status.className = 'form-status error show';
+      btn.disabled = false;
+      btn.textContent = 'Log in';
+    }
+  });
+</script>
+</body>
+</html>

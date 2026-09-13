@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redirecting… — Prime Elite Ventures</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="shortcut icon" href="/img/favicon.ico">
+<link rel="stylesheet" href="/css/modern-design-system.css">
+</head>
+<body>
+<main style="min-height:100vh; display:grid; place-items:center; text-align:center; padding:2rem">
+  <div>
+    <p>Taking you to your portal…</p>
+    <p><a href="/login" id="fallbackLink">Click here if you are not redirected</a></p>
+  </div>
+</main>
+<script src="/js/api.js"></script>
+<script>
+  // /dashboard is kept only for old links/bookmarks; it now routes each
+  // account type to its real portal: /portal-client, /portal-company, /admin.
+  (function () {
+    if (!window.PEVApi.isAuthed()) {
+      window.location.replace('/login');
+      return;
+    }
+    window.PEVApi.me()
+      .then(({ user }) => window.location.replace(window.PEVApi.portalPathForRole(user.role)))
+      .catch(() => {
+        window.PEVApi.logout();
+        window.location.replace('/login');
+      });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  background: rgba(7, 12, 20, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-hairline);
+  transition: background var(--dur-med);
+}
+[data-theme='light'] .navbar { background: rgba(246, 243, 234, 0.82); }
+
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.brand .mark {
+  width: 32px; height: 32px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 2rem);
+  list-style: none;
+  margin: 0; padding: 0;
+  font-size: var(--step--1);
+  font-weight: 500;
+}
+.nav-links a {
+  color: var(--text-secondary);
+  padding: 0.4rem 0;
+  transition: color var(--dur-fast);
+}
+.nav-links a:hover, .nav-links a:focus-visible { color: var(--accent); }
+
+.nav-item-dropdown { position: relative; padding-bottom: 14px; margin-bottom: -14px; }
+.nav-item-dropdown > button {
+  background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; gap: 0.35em;
+  color: var(--text-secondary);
+  font: inherit; padding: 0.4rem 0;
+}
+.nav-item-dropdown > button:hover { color: var(--accent); }
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  min-width: 200px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-fast), transform var(--dur-fast), visibility var(--dur-fast);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+.nav-item-dropdown:hover .dropdown-menu,
+.nav-item-dropdown:focus-within .dropdown-menu {
+  opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0);
+}
+.dropdown-menu a {
+  display: block;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--step--1);
+}
+.dropdown-menu a:hover { background: var(--surface-glass); color: var(--accent); }
+
+.nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+
+.lang-select {
+  background: transparent;
+  border: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.6rem;
+  font-size: var(--step--1);
+  cursor: pointer;
+}
+
+.theme-toggle {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border-hairline);
+  background: transparent;
+  color: var(--text-primary);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: border-color var(--dur-fast), color var(--dur-fast);
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Auth dropdown */
+.auth-widget { position: relative; }
+.login-btn { display: inline-flex; align-items: center; gap: 0.5em; }
+.user-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 190px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+.user-menu.open { display: block; }
+.user-menu a, .user-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: var(--step--1);
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.user-menu a:hover, .user-menu button:hover { background: var(--surface-glass); color: var(--accent); }
+
+/* Mobile menu toggle */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-sm);
+  width: 42px; height: 38px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .mobile-menu-toggle { display: block; }
+  .nav-links {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0; right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: var(--surface-raised);
+    border-bottom: 1px solid var(--border-hairline);
+    padding: 1rem var(--gutter) 1.5rem;
+    gap: 0.25rem;
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity var(--dur-fast), transform var(--dur-fast), visibility var(--dur-fast);
+  }
+  .nav-links.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .nav-links a, .nav-item-dropdown > button { padding: 0.75rem 0; width: 100%; justify-content: space-between; }
+  .dropdown-menu { position: static; transform: none; opacity: 1; visibility: visible; display: none; box-shadow: none; border: none; padding-left: 1rem; }
+  .nav-item-dropdown.open .dropdown-menu { display: block; }
+}
+
+
+@media (max-width: 900px) {
+  /* The logged-in state adds a notification bell alongside the theme
+     toggle and login/profile button — on a phone-width screen there isn't
+     room for the language selector too, so it steps aside first. */
+  .navbar .container { gap: 0.4rem; }
+  .lang-select { display: none; }
+  .nav-actions { gap: 0.4rem; }
+  .theme-toggle, .notif-bell-btn { width: 34px; height: 34px; }
+  .brand { font-size: 1.05rem; white-space: nowrap; }
+}
+
+@media (max-width: 480px) {
+  /* Below ~480px even the brand wordmark competes for space with the
+     profile/login button — keep the "PE" mark, drop the spelled-out name. */
+  .brand .brand-text { display: none; }
+  .login-btn #authLabel { display: none; }
+  .login-btn { padding: 0.6em; }
+}

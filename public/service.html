@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service — Prime Elite Ventures</title>
+<meta name="robots" content="index, follow">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b1220">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/img/favicon.ico">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="/css/modern-design-system.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/dark-mode.css">
+<link rel="stylesheet" href="/css/premium-design.css">
+<link rel="stylesheet" href="/css/hero.css">
+</head>
+<body>
+<header class="navbar">
+  <div class="container">
+    <a href="/" class="brand"><span class="mark">PE</span><span class="brand-text"> Prime Elite Ventures</span></a>
+    <ul class="nav-links">
+      <li><a href="/#services">All services</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <i class="fa-solid fa-sun icon-sun"></i>
+      <i class="fa-solid fa-moon icon-moon"></i>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="section" id="serviceDetail">
+    <div class="container" style="max-width:820px">
+
+      <div id="serviceLoading" class="glass-card skeleton" style="height:220px"></div>
+
+      <div id="serviceNotFound" style="display:none; text-align:center; padding:3rem 0">
+        <i class="fa-solid fa-circle-exclamation" style="font-size:2rem; color:var(--text-muted)"></i>
+        <h2 style="margin-top:1rem">We couldn't find that service</h2>
+        <p style="color:var(--text-muted)">It may have been renamed or removed.</p>
+        <a href="/#services" class="btn btn-primary" style="margin-top:1rem">View all services</a>
+      </div>
+
+      <article id="serviceContent" class="glass-card" style="display:none; padding:2.5rem">
+        <span class="service-cat" id="svcCategory"></span>
+        <div class="service-icon" id="svcIcon" style="margin:1rem 0"><i></i></div>
+        <h1 id="svcTitle" style="margin-bottom:.75rem"></h1>
+        <p id="svcSummary" style="color:var(--text-muted); font-size:1.05rem; line-height:1.7"></p>
+
+        <div style="margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border-hairline)">
+          <button type="button" class="btn btn-primary" id="requestServiceBtn">Request this service</button>
+          <form id="requestServiceForm" novalidate style="display:none; margin-top:1.25rem">
+            <div class="form-row">
+              <label for="reqDetails">What do you need?</label>
+              <textarea id="reqDetails" required placeholder="Briefly describe what you're looking for…"></textarea>
+              <span class="field-error" id="reqError"></span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Submit request</button>
+            <div class="form-status" id="reqStatus"></div>
+          </form>
+        </div>
+      </article>
+
+      <div style="margin-top:2rem; text-align:center">
+        <a href="/#services" style="color:var(--text-muted)"><i class="fa-solid fa-arrow-left"></i>&nbsp; Back to all services</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; <span id="year"></span> Prime Elite Ventures. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="/js/theme-manager.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/notifications-widget.js"></script>
+<script src="/js/auth-widget.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
+  }
+  function escapeAttr(str) {
+    return escapeHtml(str).replace(/"/g, '&quot;');
+  }
+
+  (async function loadService() {
+    const slug = window.location.pathname.split('/').filter(Boolean).pop();
+    const loadingEl = document.getElementById('serviceLoading');
+    const notFoundEl = document.getElementById('serviceNotFound');
+    const contentEl = document.getElementById('serviceContent');
+
+    try {
+      const service = await window.PEVApi.getService(slug);
+      document.title = service.title + ' — Prime Elite Ventures';
+      document.getElementById('svcCategory').textContent = service.category || '';
+      document.getElementById('svcIcon').innerHTML = `<i class="${escapeAttr(service.icon)}"></i>`;
+      document.getElementById('svcTitle').textContent = service.title;
+      document.getElementById('svcSummary').textContent = service.summary;
+
+      loadingEl.style.display = 'none';
+      contentEl.style.display = 'block';
+
+      const requestBtn = document.getElementById('requestServiceBtn');
+      const requestForm = document.getElementById('requestServiceForm');
+      requestBtn.addEventListener('click', () => {
+        if (!window.PEVApi.isAuthed()) {
+          window.location.href = '/login?next=' + encodeURIComponent(window.location.pathname);
+          return;
+        }
+        requestForm.style.display = requestForm.style.display === 'none' ? 'block' : 'none';
+      });
+
+      requestForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const status = document.getElementById('reqStatus');
+        const details = document.getElementById('reqDetails').value.trim();
+        if (!details) {
+          document.getElementById('reqError').textContent = 'Please describe what you need.';
+          return;
+        }
+        try {
+          await window.PEVApi.submitRequest({ service: service.title, details, type: 'service' });
+          status.textContent = 'Request submitted — you can track it from your portal.';
+          status.className = 'form-status success show';
+          requestForm.reset();
+        } catch (err) {
+          status.textContent = err.message || 'Something went wrong.';
+          status.className = 'form-status error show';
+        }
+      });
+    } catch (err) {
+      loadingEl.style.display = 'none';
+      notFoundEl.style.display = 'block';
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Company Portal — Prime Elite Ventures</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b1220">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/img/favicon.ico">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="/css/modern-design-system.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/dark-mode.css">
+<link rel="stylesheet" href="/css/premium-design.css">
+</head>
+<body>
+<header class="navbar">
+  <div class="container">
+    <a href="/" class="brand"><span class="mark">PE</span><span class="brand-text"> Prime Elite Ventures</span></a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-sun icon-sun"></i>
+        <i class="fa-solid fa-moon icon-moon"></i>
+      </button>
+      <div id="notifBellContainer"></div>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button>
+    </div>
+  </div>
+</header>
+
+<div class="dashboard-shell container">
+  <div id="authGate" class="glass-card protected-notice" style="display:none">
+    <i class="fa-solid fa-lock"></i>
+    <span id="gateMsg">You need to log in to view this page. <a href="/login" style="color:var(--accent)">Log in</a></span>
+  </div>
+
+  <div id="portalContent" style="display:none">
+    <div class="dashboard-header">
+      <span class="eyebrow" id="companyEyebrow">Company Portal</span>
+      <h2 id="welcomeMsg">Welcome</h2>
+      <p>Submit and track service engagements on behalf of your organisation.</p>
+    </div>
+
+    <div class="glass-card" style="margin-bottom:2rem">
+      <h3 style="margin-bottom:1rem">New service request</h3>
+      <form id="requestForm" novalidate>
+        <div class="form-row">
+          <label for="service">Service</label>
+          <select id="service" name="service" required>
+            <option value="">Select a service…</option>
+          </select>
+          <span class="field-error" id="err-service"></span>
+        </div>
+        <div class="form-row">
+          <label for="details">What does your organisation need?</label>
+          <textarea id="details" name="details" required placeholder="Briefly describe the engagement your company is looking for…"></textarea>
+          <span class="field-error" id="err-details"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" id="requestSubmit">Submit request</button>
+        <div class="form-status" id="requestStatus"></div>
+      </form>
+    </div>
+
+    <div class="glass-card" style="overflow-x:auto">
+      <h3 style="margin-bottom:1rem">Company service requests</h3>
+      <table class="data-table" id="requestsTable">
+        <thead>
+          <tr><th>Service</th><th>Details</th><th>Submitted</th><th>Status</th></tr>
+        </thead>
+        <tbody id="requestsBody">
+          <tr><td colspan="4">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="glass-card" style="overflow-x:auto; margin-top:1.5rem">
+      <h3 style="margin-bottom:1rem">Company projects</h3>
+      <p style="font-size:var(--step--1); color:var(--text-muted); margin-top:-.5rem">Applied for from the <a href="/#projects" style="color:var(--accent)">Projects section</a> on the homepage.</p>
+      <table class="data-table" id="projectsRequestsTable">
+        <thead>
+          <tr><th>Project</th><th>Details</th><th>Submitted</th><th>Status</th></tr>
+        </thead>
+        <tbody id="projectsRequestsBody">
+          <tr><td colspan="4">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="glass-card" style="margin-top:2rem">
+      <h3 style="margin-bottom:1rem">Book a consultation</h3>
+      <form id="bookingForm" novalidate>
+        <div class="form-row">
+          <label for="bookingTopic">Topic</label>
+          <input type="text" id="bookingTopic" name="topic" required placeholder="What would you like to discuss?">
+          <span class="field-error" id="err-topic"></span>
+        </div>
+        <div class="form-row">
+          <label for="bookingDate">Preferred date</label>
+          <input type="date" id="bookingDate" name="preferredDate" required>
+          <span class="field-error" id="err-preferredDate"></span>
+        </div>
+        <div class="form-row">
+          <label for="bookingTime">Preferred time (optional)</label>
+          <input type="time" id="bookingTime" name="preferredTime">
+        </div>
+        <div class="form-row">
+          <label for="bookingNotes">Notes (optional)</label>
+          <textarea id="bookingNotes" name="notes" placeholder="Anything we should know ahead of time?"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm" id="bookingSubmit">Request booking</button>
+        <div class="form-status" id="bookingStatus"></div>
+      </form>
+    </div>
+
+    <div class="glass-card" style="overflow-x:auto; margin-top:1.5rem">
+      <h3 style="margin-bottom:1rem">Our bookings</h3>
+      <table class="data-table" id="bookingsTable">
+        <thead>
+          <tr><th>Topic</th><th>Preferred date/time</th><th>Notes</th><th>Status</th></tr>
+        </thead>
+        <tbody id="bookingsBody">
+          <tr><td colspan="4">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="glass-card" style="overflow-x:auto; margin-top:1.5rem">
+      <h3 style="margin-bottom:1rem">Our invoices</h3>
+      <table class="data-table" id="invoicesTable">
+        <thead>
+          <tr><th>Invoice #</th><th>Description</th><th>Amount</th><th>Due</th><th>Status</th></tr>
+        </thead>
+        <tbody id="invoicesBody">
+          <tr><td colspan="5">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="glass-card" style="margin-top:2rem">
+      <h3 style="margin-bottom:1rem">Request an official email address</h3>
+      <p style="font-size:var(--step--1); color:var(--text-muted); margin-top:-.5rem">Need an @primeeliteventures.example mailbox for your team's correspondence with us? Submit a request below — an admin will review and approve it.</p>
+      <form id="mailRequestForm" novalidate>
+        <div class="form-row">
+          <label for="requestedAddress">Preferred address (optional)</label>
+          <input type="text" id="requestedAddress" name="requestedAddress" placeholder="e.g. accounts@primeeliteventures.example">
+        </div>
+        <div class="form-row">
+          <label for="mailReason">What's it for?</label>
+          <textarea id="mailReason" name="reason" required placeholder="Briefly explain what your team needs the mailbox for…"></textarea>
+          <span class="field-error" id="err-reason"></span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm" id="mailRequestSubmit">Submit request</button>
+        <div class="form-status" id="mailRequestStatus"></div>
+      </form>
+    </div>
+
+    <div class="glass-card" style="overflow-x:auto; margin-top:1.5rem">
+      <h3 style="margin-bottom:1rem">Our email requests</h3>
+      <table class="data-table" id="mailRequestsTable">
+        <thead>
+          <tr><th>Requested address</th><th>Reason</th><th>Submitted</th><th>Status</th></tr>
+        </thead>
+        <tbody id="mailRequestsBody">
+          <tr><td colspan="4">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="/js/theme-manager.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/notifications-widget.js"></script>
+<script>
+  const STATUS_LABEL = { pending: 'Pending', in_progress: 'In progress', completed: 'Completed', cancelled: 'Cancelled' };
+  const STATUS_CLASS = { pending: 'new', in_progress: 'new', completed: 'read', cancelled: 'read' };
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, (m) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[m]));
+  }
+
+  async function loadRequests() {
+    const body = document.getElementById('requestsBody');
+    try {
+      const requests = await window.PEVApi.getMyRequests('service');
+      if (!requests.length) {
+        body.innerHTML = '<tr><td colspan="4">No requests yet — submit one above.</td></tr>';
+        return;
+      }
+      body.innerHTML = requests.map((r) => `
+        <tr>
+          <td>${escapeHtml(r.service)}</td>
+          <td>${escapeHtml(r.details.slice(0, 60))}${r.details.length > 60 ? '…' : ''}</td>
+          <td>${new Date(r.createdAt).toLocaleDateString()}</td>
+          <td><span class="status-badge ${STATUS_CLASS[r.status]}">${STATUS_LABEL[r.status]}</span></td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      body.innerHTML = '<tr><td colspan="4">Could not load your requests.</td></tr>';
+    }
+  }
+
+  async function loadProjectRequests() {
+    const body = document.getElementById('projectsRequestsBody');
+    try {
+      const requests = await window.PEVApi.getMyRequests('project');
+      if (!requests.length) {
+        body.innerHTML = '<tr><td colspan="4">No project applications yet.</td></tr>';
+        return;
+      }
+      body.innerHTML = requests.map((r) => `
+        <tr>
+          <td>${escapeHtml(r.service)}</td>
+          <td>${escapeHtml(r.details.slice(0, 60))}${r.details.length > 60 ? '…' : ''}</td>
+          <td>${new Date(r.createdAt).toLocaleDateString()}</td>
+          <td><span class="status-badge ${STATUS_CLASS[r.status]}">${STATUS_LABEL[r.status]}</span></td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      body.innerHTML = '<tr><td colspan="4">Could not load your projects.</td></tr>';
+    }
+  }
+
+  const BOOKING_STATUS_LABEL = { pending: 'Pending', confirmed: 'Confirmed', cancelled: 'Cancelled' };
+  const BOOKING_STATUS_CLASS = { pending: 'new', confirmed: 'read', cancelled: 'read' };
+
+  async function loadBookings() {
+    const body = document.getElementById('bookingsBody');
+    try {
+      const bookings = await window.PEVApi.getMyBookings();
+      if (!bookings.length) {
+        body.innerHTML = '<tr><td colspan="4">No bookings yet.</td></tr>';
+        return;
+      }
+      body.innerHTML = bookings.map((b) => `
+        <tr>
+          <td>${escapeHtml(b.topic)}</td>
+          <td>${escapeHtml(b.preferredDate)}${b.preferredTime ? ' ' + escapeHtml(b.preferredTime) : ''}</td>
+          <td>${escapeHtml((b.notes || '').slice(0, 60))}</td>
+          <td><span class="status-badge ${BOOKING_STATUS_CLASS[b.status]}">${BOOKING_STATUS_LABEL[b.status]}</span></td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      body.innerHTML = '<tr><td colspan="4">Could not load your bookings.</td></tr>';
+    }
+  }
+
+  const INVOICE_STATUS_CLASS = { unpaid: 'new', paid: 'read', overdue: 'new', cancelled: 'read' };
+
+  async function loadInvoices() {
+    const body = document.getElementById('invoicesBody');
+    try {
+      const invoices = await window.PEVApi.getMyInvoices();
+      if (!invoices.length) {
+        body.innerHTML = '<tr><td colspan="5">No invoices yet.</td></tr>';
+        return;
+      }
+      body.innerHTML = invoices.map((inv) => `
+        <tr>
+          <td>${escapeHtml(inv.invoiceNumber)}</td>
+          <td>${escapeHtml(inv.description)}</td>
+          <td>${escapeHtml(inv.currency)} ${inv.amount.toLocaleString()}</td>
+          <td>${new Date(inv.dueDate).toLocaleDateString()}</td>
+          <td><span class="status-badge ${INVOICE_STATUS_CLASS[inv.status] || 'new'}">${inv.status[0].toUpperCase() + inv.status.slice(1)}</span></td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      body.innerHTML = '<tr><td colspan="5">Could not load your invoices.</td></tr>';
+    }
+  }
+
+  document.getElementById('bookingForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const status = document.getElementById('bookingStatus');
+    const btn = document.getElementById('bookingSubmit');
+    document.querySelectorAll('#bookingForm .field-error').forEach((el) => (el.textContent = ''));
+    status.className = 'form-status';
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+    try {
+      await window.PEVApi.submitBooking({
+        topic: document.getElementById('bookingTopic').value.trim(),
+        preferredDate: document.getElementById('bookingDate').value,
+        preferredTime: document.getElementById('bookingTime').value,
+        notes: document.getElementById('bookingNotes').value.trim(),
+      });
+      status.textContent = 'Booking requested — we\'ll confirm shortly.';
+      status.className = 'form-status success show';
+      document.getElementById('bookingForm').reset();
+      await loadBookings();
+    } catch (err) {
+      if (err.fields) {
+        Object.entries(err.fields).forEach(([field, msg]) => {
+          const el = document.getElementById('err-' + field);
+          if (el) el.textContent = msg;
+        });
+      }
+      status.textContent = err.message || 'Something went wrong.';
+      status.className = 'form-status error show';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Request booking';
+    }
+  });
+
+  (async function () {
+    const gate = document.getElementById('authGate');
+    const content = document.getElementById('portalContent');
+
+    if (!window.PEVApi.isAuthed()) {
+      gate.style.display = 'flex';
+      return;
+    }
+
+    try {
+      const { user } = await window.PEVApi.me();
+      if (user.role !== 'company') {
+        gate.style.display = 'flex';
+        document.getElementById('gateMsg').innerHTML = `This portal is for business accounts. <a href="${window.PEVApi.portalPathForRole(user.role)}" style="color:var(--accent)">Go to your portal</a>`;
+        return;
+      }
+
+      document.getElementById('companyEyebrow').textContent = user.companyName || 'Company Portal';
+      document.getElementById('welcomeMsg').textContent = 'Welcome, ' + user.name;
+      content.style.display = 'block';
+
+      const services = await window.PEVApi.getServices();
+      const select = document.getElementById('service');
+      services.forEach((s) => {
+        const opt = document.createElement('option');
+        opt.value = s.title;
+        opt.textContent = s.title;
+        select.appendChild(opt);
+      });
+
+      await loadRequests();
+      await loadProjectRequests();
+      await loadBookings();
+      await loadInvoices();
+      await loadMailRequests();
+    } catch (err) {
+      gate.style.display = 'flex';
+      document.getElementById('gateMsg').textContent = 'Your session has expired. Please log in again.';
+      window.PEVApi.logout();
+    }
+  })();
+
+  document.getElementById('requestForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const status = document.getElementById('requestStatus');
+    const btn = document.getElementById('requestSubmit');
+    document.querySelectorAll('.field-error').forEach((el) => (el.textContent = ''));
+    status.className = 'form-status';
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+    try {
+      await window.PEVApi.submitRequest({
+        service: document.getElementById('service').value,
+        details: document.getElementById('details').value.trim(),
+      });
+      status.textContent = 'Request submitted. Our team will follow up shortly.';
+      status.className = 'form-status success show';
+      document.getElementById('requestForm').reset();
+      await loadRequests();
+    } catch (err) {
+      if (err.fields) {
+        Object.entries(err.fields).forEach(([field, msg]) => {
+          const el = document.getElementById('err-' + field);
+          if (el) el.textContent = msg;
+        });
+      }
+      status.textContent = err.message || 'Something went wrong.';
+      status.className = 'form-status error show';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Submit request';
+    }
+  });
+
+  const MAIL_STATUS_LABEL = { pending: 'Pending', approved: 'Approved', denied: 'Denied' };
+  const MAIL_STATUS_CLASS = { pending: 'new', approved: 'read', denied: 'read' };
+
+  async function loadMailRequests() {
+    const body = document.getElementById('mailRequestsBody');
+    try {
+      const requests = await window.PEVApi.getMyEmailRequests();
+      if (!requests.length) {
+        body.innerHTML = '<tr><td colspan="4">No requests yet.</td></tr>';
+        return;
+      }
+      body.innerHTML = requests.map((r) => `
+        <tr>
+          <td>${escapeHtml(r.requestedAddress || '—')}</td>
+          <td>${escapeHtml(r.reason.slice(0, 60))}${r.reason.length > 60 ? '…' : ''}</td>
+          <td>${new Date(r.createdAt).toLocaleDateString()}</td>
+          <td><span class="status-badge ${MAIL_STATUS_CLASS[r.status]}">${MAIL_STATUS_LABEL[r.status]}</span></td>
+        </tr>
+      `).join('');
+    } catch (e) {
+      body.innerHTML = '<tr><td colspan="4">Could not load your requests.</td></tr>';
+    }
+  }
+
+  document.getElementById('mailRequestForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const status = document.getElementById('mailRequestStatus');
+    const btn = document.getElementById('mailRequestSubmit');
+    document.getElementById('err-reason').textContent = '';
+    status.className = 'form-status';
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+    try {
+      await window.PEVApi.submitEmailRequest({
+        requestedAddress: document.getElementById('requestedAddress').value.trim(),
+        reason: document.getElementById('mailReason').value.trim(),
+      });
+      status.textContent = 'Request submitted. An admin will review it shortly.';
+      status.className = 'form-status success show';
+      document.getElementById('mailRequestForm').reset();
+      await loadMailRequests();
+    } catch (err) {
+      if (err.fields) {
+        Object.entries(err.fields).forEach(([field, msg]) => {
+          const el = document.getElementById('err-' + field);
+          if (el) el.textContent = msg;
+        });
+      }
+      status.textContent = err.message || 'Something went wrong.';
+      status.className = 'form-status error show';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Submit request';
+    }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', function () {
+    window.PEVApi.logout();
+    window.location.href = '/';
+  });
+</script>
+</body>
+</html>

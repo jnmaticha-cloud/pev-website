@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Portal — Prime Elite Ventures</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b1220">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/img/favicon.ico">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="/css/modern-design-system.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/dark-mode.css">
+<link rel="stylesheet" href="/css/premium-design.css">
+<style>
+  .admin-tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+  .status-select, .score-input {
+    background: var(--surface-glass); border: 1px solid var(--border-hairline);
+    color: var(--text-primary); border-radius: var(--radius-sm); padding: .35em .6em;
+    font: inherit; font-size: var(--step--1);
+  }
+  .score-input { width: 64px; }
+  .admin-panel { display: none; }
+  .admin-panel.active { display: block; }
+  .sub-tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .sub-tab-panel { display: none; }
+  .sub-tab-panel.active { display: block; }
+  .cms-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .75rem; margin-bottom: 1.25rem; align-items: end; }
+  .cms-form .form-row { margin-bottom: 0; }
+  .cms-form textarea { min-height: 60px; }
+  .row-actions { display: flex; gap: .4rem; }
+  .rank-badge { font-family: var(--font-mono); color: var(--accent); font-weight: 600; }
+  .summary-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+</style>
+</head>
+<body>
+<header class="navbar">
+  <div class="container">
+    <a href="/" class="brand"><span class="mark">PE</span><span class="brand-text"> Prime Elite Ventures</span> <span style="font-family:var(--font-mono); font-size:.65rem; color:var(--accent); border:1px solid var(--border-hairline); padding:.15rem .5rem; border-radius:999px; margin-left:.5rem">ADMIN</span></a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-sun icon-sun"></i>
+        <i class="fa-solid fa-moon icon-moon"></i>
+      </button>
+      <div id="notifBellContainer"></div>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button>
+    </div>
+  </div>
+</header>
+
+<div class="dashboard-shell container">
+  <div id="authGate" class="glass-card protected-notice" style="display:none">
+    <i class="fa-solid fa-lock"></i>
+    <span id="gateMsg">You need to log in as an administrator to view this page. <a href="/login" style="color:var(--accent)">Log in</a></span>
+  </div>
+
+  <div id="portalContent" style="display:none">
+    <div class="dashboard-header">
+      <span class="eyebrow">Admin Portal</span>
+      <h2 id="welcomeMsg">Welcome</h2>
+      <p>Manage service requests, site content, job applicants, clients, and inbound messages.</p>
+    </div>
+
+    <div class="kpi-row" id="kpiRow">
+      <div class="glass-card kpi-card skeleton" style="min-height:90px"></div>
+      <div class="glass-card kpi-card skeleton" style="min-height:90px"></div>
+      <div class="glass-card kpi-card skeleton" style="min-height:90px"></div>
+      <div class="glass-card kpi-card skeleton" style="min-height:90px"></div>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="filter-btn active" data-panel="panelRequests" data-perm="requests">Requests</button>
+      <button class="filter-btn" data-panel="panelApplications" data-perm="applications">Job Applications</button>
+      <button class="filter-btn" data-panel="panelContent" data-perm="content">Site Content</button>
+      <button class="filter-btn" data-panel="panelUsers" data-perm="users">Clients &amp; Companies</button>
+      <button class="filter-btn" data-panel="panelStaff" data-perm="staff">Staff Accounts</button>
+      <button class="filter-btn" data-panel="panelEmailRequests" data-perm="email_requests">Email Requests</button>
+      <button class="filter-btn" data-panel="panelPartners" data-perm="partners">Partner Applications</button>
+      <button class="filter-btn" data-panel="panelBookings" data-perm="bookings">Bookings</button>
+      <button class="filter-btn" data-panel="panelInvoices" data-perm="invoices">Invoices</button>
+      <button class="filter-btn" data-panel="panelReports" data-perm="reports">Reports</button>
+      <button class="filter-btn" data-panel="panelMessages" data-perm="messages">Contact Messages</button>
+      <button class="filter-btn" data-panel="panelNotifications" data-perm="reports">Notifications</button>
+    </div>
+
+    <!-- ===== Requests (services + projects) ===== -->
+    <div class="glass-card admin-panel active" id="panelRequests" style="overflow-x:auto">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1rem">
+        <h3 style="margin:0">All requests</h3>
+        <select class="status-select" id="requestTypeFilter">
+          <option value="">All types</option>
+          <option value="service">Services only</option>
+          <option value="project">Projects only</option>
+        </select>
+      </div>
+      <table class="data-table" id="requestsTable">
+        <thead>
+          <tr><th>Submitted by</th><th>Account</th><th>Type</th><th>Item</th><th>Details</th><th>Date</th><th>Status</th></tr>
+        </thead>
+        <tbody id="requestsBody"><tr><td colspan="7">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ===== Job Applications ===== -->
+    <div class="admin-panel" id="panelApplications">
+      <div class="summary-row" id="applicationsSummary"></div>
+      <div class="glass-card" style="overflow-x:auto">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1rem">
+          <h3 style="margin:0">Ranked applicants</h3>
+          <select class="status-select" id="jobFilter"><option value="">All openings</option></select>
+        </div>
+        <p style="font-size:var(--step--1); color:var(--text-muted); margin-top:-.5rem">Ranked by score — auto-calculated from education, experience, and keyword match to the role. Override any score to adjust the ranking manually.</p>
+        <table class="data-table" id="applicationsTable">
+          <thead>
+            <tr><th>Rank</th><th>Applicant</th><th>Role applied to</th><th>Experience</th><th>Education</th><th>Auto score</th><th>Override</th><th>Status</th><th>Resume</th></tr>
+          </thead>
+          <tbody id="applicationsBody"><tr><td colspan="9">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== Site Content (CMS) ===== -->
+    <div class="admin-panel" id="panelContent">
+      <div class="sub-tabs" id="cmsSubTabs">
+        <button class="filter-btn active" data-collection="services">Services</button>
+        <button class="filter-btn" data-collection="projects">Projects</button>
+        <button class="filter-btn" data-collection="directors">Directors</button>
+        <button class="filter-btn" data-collection="gallery">Gallery</button>
+        <button class="filter-btn" data-collection="careers">Careers</button>
+        <button class="filter-btn" data-collection="resources">Resources</button>
+        <button class="filter-btn" data-collection="coreValues">Core Values</button>
+        <button class="filter-btn" data-collection="announcements">Announcements</button>
+        <button class="filter-btn" data-collection="siteCopy">Hero &amp; About Copy</button>
+        <button class="filter-btn" data-collection="stats">Homepage Stats</button>
+        <button class="filter-btn" data-collection="settings">Contact &amp; Socials</button>
+      </div>
+      <p style="font-size:var(--step--1); color:var(--text-muted); margin:-0.5rem 0 1rem">Team profiles are managed from the <strong>Staff Accounts</strong> tab — only featured staff appear on the public Team section.</p>
+
+      <div class="glass-card" id="cmsPanel" style="overflow-x:auto">
+        <div id="cmsFormWrap">
+          <h3 style="margin-bottom:1rem" id="cmsFormTitle">Add new</h3>
+          <form class="cms-form" id="cmsForm"></form>
+        </div>
+        <table class="data-table" id="cmsTable" style="margin-top:1rem">
+          <thead id="cmsTableHead"></thead>
+          <tbody id="cmsTableBody"><tr><td>Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== Users ===== -->
+    <div class="glass-card admin-panel" id="panelUsers" style="overflow-x:auto">
+      <h3 style="margin-bottom:1rem">Company accounts awaiting approval</h3>
+      <table class="data-table" id="companyApprovalsTable">
+        <thead>
+          <tr><th>Contact</th><th>Email</th><th>Company</th><th>Role at company</th><th>Applied</th><th>Decision</th></tr>
+        </thead>
+        <tbody id="companyApprovalsBody"><tr><td colspan="6">Loading…</td></tr></tbody>
+      </table>
+
+      <h3 style="margin:2rem 0 1rem">Registered clients &amp; companies</h3>
+      <table class="data-table" id="usersTable">
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Type</th><th>Company</th><th>Joined</th></tr>
+        </thead>
+        <tbody id="usersBody"><tr><td colspan="5">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ===== Staff ===== -->
+    <div class="glass-card admin-panel" id="panelStaff" style="overflow-x:auto">
+      <h3 style="margin-bottom:1rem">Add a staff account</h3>
+      <p style="font-size:var(--step--1); color:var(--text-muted); margin-top:-.5rem">New staff get full admin access — the same as your account. Only give this to people you trust with everything on this page.</p>
+      <form class="cms-form" id="staffForm" style="margin-bottom:1.5rem">
+        <div class="form-row"><label>Name</label><input name="name" required></div>
+        <div class="form-row"><label>Email</label><input name="email" type="email" required></div>
+        <div class="form-row"><label>Temporary password</label><input name="password" type="password" minlength="8" required></div>
+        <div class="form-row"><label>Category</label>
+          <select name="category" id="staffCategorySelect"></select>
+        </div>
+        <div class="form-row"><label>Title (e.g. "Head of Strategy")</label><input name="title"></div>
+        <div class="form-row" style="grid-column: 1 / -1"><label>Bio</label><textarea name="bio" placeholder="Shown on the public Team card if featured"></textarea></div>
+        <div class="form-row" style="flex-direction:row; align-items:center; gap:.5rem">
+          <input type="checkbox" name="featured" id="staffFeaturedNew" style="width:auto">
+          <label for="staffFeaturedNew" style="margin:0">Feature on public Team section</label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Create staff account</button>
+      </form>
+      <div class="form-status" id="staffStatus"></div>
+      <h3 style="margin-bottom:1rem">Staff accounts</h3>
+      <p style="font-size:var(--step--1); color:var(--text-muted); margin-top:-.5rem">Only accounts checked "Featured" appear on the public Team section — junior or back-office staff can have full portal access without a public profile.</p>
+      <table class="data-table" id="staffTable">
+        <thead>
+          <tr><th>Photo</th><th>Name</th><th>Email</th><th>Category</th><th>Title</th><th>Bio</th><th>Featured</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="staffBody"><tr><td colspan="8">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ===== Email Requests ===== -->
+    <div class="glass-card admin-panel" id="panelEmailRequests" style="overflow-x:auto">
+      <h3 style="margin-bottom:1rem">Official email requests</h3>
+      <p style="font-size:var(--step--1); color:var(--text-muted); margin-top:-.5rem">Requests from clients, companies, and staff for an official @primeeliteventures.example mailbox. Approve or deny each one below.</p>
+      <table class="data-table" id="emailRequestsTable">
+        <thead>
+          <tr><th>From</th><th>Type</th><th>Requested address</th><th>Reason</th><th>Submitted</th><th>Status</th><th>Note</th></tr>
+        </thead>
+        <tbody id="emailRequestsBody"><tr><td colspan="7">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ===== Partner Applications ===== -->
+    <div class="glass-card admin-panel" id="panelPartners" style="overflow-x:auto">
+      <h3 style="margin-bottom:1rem">Partner applications</h3>
+      <p style="font-size:var(--step--1); color:var(--text-muted); margin-top:-.5rem">People and organisations interested in becoming a Prime Elite Ventures partner.</p>
+      <table class="data-table" id="partnersTable">
+        <thead>
+          <tr><th>Name</th><th>Organisation</th><th>Type</th><th>Message</th><th>Submitted</th><th>Status</th><th>Note</th></tr>
+        </thead>
+        <tbody id="partnersBody"><tr><td colspan="7">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ===== Bookings ===== -->
+    <div class="glass-card admin-panel" id="panelBookings" style="overflow-x:auto">
+      <h3 style="margin-bottom:1rem">Consultation bookings</h3>
+      <table class="data-table" id="bookingsTable">
+        <thead>
+          <tr><th>Requested by</th><th>Topic</th><th>Preferred date/time</th><th>Notes</th><th>Submitted</th><th>Status</th></tr>
+        </thead>
+        <tbody id="bookingsBody"><tr><td colspan="6">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ===== Invoices ===== -->
+    <div class="glass-card admin-panel" id="panelInvoices" style="overflow-x:auto">
+      <h3 style="margin-bottom:1rem">Create an invoice</h3>
+      <form class="cms-form" id="invoiceForm" style="margin-bottom:1.5rem">
+        <div class="form-row">
+          <label>Client / Company</label>
+          <select name="userId" id="invoiceUserSelect" required></select>
+        </div>
+        <div class="form-row"><label>Description</label><input name="description" required></div>
+        <div class="form-row"><label>Amount</label><input name="amount" type="number" step="0.01" min="0" required></div>
+        <div class="form-row"><label>Currency</label><input name="currency" value="USD"></div>
+        <div class="form-row"><label>Due date</label><input name="dueDate" type="date" required></div>
+        <button type="submit" class="btn btn-primary btn-sm">Create invoice</button>
+      </form>
+      <div class="form-status" id="invoiceStatus"></div>
+      <h3 style="margin-bottom:1rem">All invoices</h3>
+      <table class="data-table" id="invoicesTable">
+        <thead>
+          <tr><th>Invoice #</th><th>Client</th><th>Description</th><th>Amount</th><th>Due</th><th>Status</th></tr>
+        </thead>
+        <tbody id="invoicesBody"><tr><td colspan="6">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ===== Reports ===== -->
+    <div class="glass-card admin-panel" id="panelReports">
+      <h3 style="margin-bottom:1rem">Generate a report</h3>
+      <form class="cms-form" id="reportForm" style="margin-bottom:1.5rem">
+        <div class="form-row">
+          <label>Report</label>
+          <select name="type" id="reportTypeSelect"></select>
+        </div>
+        <div class="form-row"><label>From (optional)</label><input name="from" type="date"></div>
+        <div class="form-row"><label>To (optional)</label><input name="to" type="date"></div>
+        <button type="submit" class="btn btn-primary btn-sm">Generate</button>
+      </form>
+      <div id="reportResults" style="display:none">
+        <div class="summary-row" id="reportSummary"></div>
+        <div class="glass-card" style="overflow-x:auto; padding:0">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:1rem 1rem 0">
+            <h4 style="margin:0" id="reportRowsHeading">Rows</h4>
+            <button type="button" class="btn btn-ghost btn-sm" id="reportExportBtn">Export CSV</button>
+          </div>
+          <table class="data-table" id="reportTable" style="margin-top:1rem">
+            <thead id="reportTableHead"></thead>
+            <tbody id="reportTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Messages ===== -->
+    <div class="glass-card admin-panel" id="panelMessages" style="overflow-x:auto">
+      <h3 style="margin-bottom:1rem">Contact form messages</h3>
+      <table class="data-table" id="messagesTable">
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Message</th><th>Received</th></tr>
+        </thead>
+        <tbody id="messagesBody"><tr><td colspan="4">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- ===== Notifications ===== -->
+    <div class="glass-card admin-panel" id="panelNotifications" style="overflow-x:auto">
+      <h3 style="margin-bottom:1rem">Notification log</h3>
+      <p style="font-size:var(--step--1); color:var(--text-muted); margin-top:-.5rem">
+        Emails sent automatically when you change a status: service requests, job applications, and official email requests.
+        <span id="smtpStatusNote"></span>
+      </p>
+      <table class="data-table" id="notificationsTable">
+        <thead>
+          <tr><th>To</th><th>Subject</th><th>Sent</th><th>Status</th></tr>
+        </thead>
+        <tbody id="notificationsBody"><tr><td colspan="4">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="/js/theme-manager.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/notifications-widget.js"></script>
+<script>
+  const STATUS_OPTIONS = ['pending', 'in_progress', 'completed', 'cancelled'];
+  const STATUS_LABEL = { pending: 'Pending', in_progress: 'In progress', completed: 'Completed', cancelled: 'Cancelled' };
+  const APP_STATUS_OPTIONS = ['new', 'reviewed', 'shortlisted', 'rejected', 'hired'];
+  const EDUCATION_LABEL = { high_school: 'High school', diploma: 'Diploma', bachelors: "Bachelor's", masters: "Master's", phd: 'PhD' };
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, (m) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[m]));
+  }
+
+  /* ---------- KPIs ---------- */
+  async function loadKpis() {
+    const summary = await window.PEVApi.adminSummary();
+    document.getElementById('kpiRow').innerHTML = [
+      { label: 'Total requests', value: summary.totalRequests },
+      { label: 'Pending requests', value: summary.pendingRequests },
+      { label: 'Clients', value: summary.totalClients },
+      { label: 'Companies', value: summary.totalCompanies },
+    ].map((k) => `
+      <div class="glass-card kpi-card">
+        <span class="kpi-value">${k.value}</span>
+        <div class="kpi-label">${k.label}</div>
+      </div>
+    `).join('');
+  }
+
+  /* ---------- Service requests ---------- */
+  async function loadRequests() {
+    const body = document.getElementById('requestsBody');
+    const typeFilter = document.getElementById('requestTypeFilter').value;
+    const requests = await window.PEVApi.adminRequests(typeFilter || null);
+    if (!requests.length) {
+      body.innerHTML = '<tr><td colspan="7">No requests yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = requests.map((r) => `
+      <tr data-id="${r.id}">
+        <td>${escapeHtml(r.userName)}</td>
+        <td>${r.userRole === 'company' ? 'Company' : 'Individual'}</td>
+        <td><span class="status-badge ${r.type === 'project' ? 'new' : 'read'}">${r.type === 'project' ? 'Project' : 'Service'}</span></td>
+        <td>${escapeHtml(r.service)}</td>
+        <td>${escapeHtml(r.details.slice(0, 50))}${r.details.length > 50 ? '…' : ''}</td>
+        <td>${new Date(r.createdAt).toLocaleDateString()}</td>
+        <td>
+          <select class="status-select" data-id="${r.id}">
+            ${STATUS_OPTIONS.map((s) => `<option value="${s}" ${s === r.status ? 'selected' : ''}>${STATUS_LABEL[s]}</option>`).join('')}
+          </select>
+        </td>
+      </tr>
+    `).join('');
+
+    body.querySelectorAll('.status-select').forEach((sel) => {
+      sel.addEventListener('change', async () => {
+        sel.disabled = true;
+        try {
+          await window.PEVApi.adminUpdateRequestStatus(sel.dataset.id, sel.value);
+          await loadKpis();
+          loadNotifications().catch(() => {});
+        } catch (e) {
+          alert('Could not update status: ' + (e.message || 'unknown error'));
+        } finally {
+          sel.disabled = false;
+        }
+      });
+    });
+  }
+
+  /* ---------- Job applications ---------- */
+  async function loadApplicationsSummary() {
+    const summary = await window.PEVApi.adminApplicationsSummary();
+    document.getElementById('applicationsSummary').innerHTML = summary.map((s) => `
+      <div class="glass-card">
+        <h4 style="margin-bottom:.35em">${escapeHtml(s.jobTitle)}</h4>
+        <p style="margin-bottom:.25em">${s.count} applicant${s.count === 1 ? '' : 's'} · avg score ${s.averageScore}</p>
+        ${s.topCandidate ? `<p style="margin:0; color:var(--accent); font-size:var(--step--1)">Top: ${escapeHtml(s.topCandidate.name)} (${s.topCandidate.score})</p>` : '<p style="margin:0; color:var(--text-muted); font-size:var(--step--1)">No applicants yet</p>'}
+      </div>
+    `).join('');
+
+    const filter = document.getElementById('jobFilter');
+    const current = filter.value;
+    filter.innerHTML = '<option value="">All openings</option>' + summary.map((s) => `<option value="${s.jobId}">${escapeHtml(s.jobTitle)}</option>`).join('');
+    filter.value = current;
+  }
+
+  async function loadApplications() {
+    const body = document.getElementById('applicationsBody');
+    const jobId = document.getElementById('jobFilter').value;
+    const apps = await window.PEVApi.adminGetApplications(jobId || null);
+    if (!apps.length) {
+      body.innerHTML = '<tr><td colspan="9">No applications yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = apps.map((a) => `
+      <tr data-id="${a.id}">
+        <td class="rank-badge">#${a.rank}</td>
+        <td>${escapeHtml(a.name)}<br><span style="color:var(--text-muted); font-size:var(--step--1)">${escapeHtml(a.email)}</span></td>
+        <td>${escapeHtml(a.jobTitle)}</td>
+        <td>${a.yearsExperience} yrs</td>
+        <td>${EDUCATION_LABEL[a.education] || escapeHtml(a.education)}</td>
+        <td>${a.autoScore}</td>
+        <td><input type="number" class="score-input override-input" min="0" max="100" value="${a.adminScore === null ? '' : a.adminScore}" placeholder="${a.autoScore}" data-id="${a.id}"></td>
+        <td>
+          <select class="status-select app-status-select" data-id="${a.id}">
+            ${APP_STATUS_OPTIONS.map((s) => `<option value="${s}" ${s === a.status ? 'selected' : ''}>${s[0].toUpperCase() + s.slice(1)}</option>`).join('')}
+          </select>
+        </td>
+        <td><button type="button" class="btn btn-ghost btn-sm resume-dl" data-id="${a.id}" data-name="${escapeHtml(a.name)}"><i class="fa-solid fa-download"></i></button></td>
+      </tr>
+    `).join('');
+
+    body.querySelectorAll('.override-input').forEach((input) => {
+      input.addEventListener('change', async () => {
+        const raw = input.value.trim();
+        const adminScore = raw === '' ? null : Number(raw);
+        input.disabled = true;
+        try {
+          await window.PEVApi.adminUpdateApplication(input.dataset.id, { adminScore });
+          await Promise.all([loadApplications(), loadApplicationsSummary()]);
+        } catch (e) {
+          alert('Could not update score: ' + (e.message || 'unknown error'));
+          input.disabled = false;
+        }
+      });
+    });
+
+    body.querySelectorAll('.app-status-select').forEach((sel) => {
+      sel.addEventListener('change', async () => {
+        sel.disabled = true;
+        try {
+          await window.PEVApi.adminUpdateApplication(sel.dataset.id, { status: sel.value });
+          loadNotifications().catch(() => {});
+        } catch (e) {
+          alert('Could not update status: ' + (e.message || 'unknown error'));
+        } finally {
+          sel.disabled = false;
+        }
+      });
+    });
+
+    body.querySelectorAll('.resume-dl').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        try {
+          await window.PEVApi.adminDownloadResume(btn.dataset.id, btn.dataset.name + '-resume');
+        } catch (e) {
+          alert('Could not download resume: ' + (e.message || 'unknown error'));
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    });
+  }
+
+  document.getElementById('jobFilter').addEventListener('change', loadApplications);
+  document.getElementById('requestTypeFilter').addEventListener('change', loadRequests);
+
+  /* ---------- Site content CMS ---------- */
+  const CMS_FIELDS = {
+    services: {
+      fields: [
+        { key: 'title', label: 'Title' },
+        { key: 'icon', label: 'Icon (e.g. fa-solid fa-chess-knight)' },
+        { key: 'category', label: 'Category' },
+        { key: 'summary', label: 'Summary', textarea: true },
+      ],
+    },
+    projects: {
+      fields: [
+        { key: 'title', label: 'Title' },
+        { key: 'icon', label: 'Icon (e.g. fa-solid fa-rocket)' },
+        { key: 'category', label: 'Category' },
+        { key: 'summary', label: 'Summary', textarea: true },
+      ],
+    },
+    directors: {
+      imageField: 'photoUrl',
+      fields: [
+        { key: 'name', label: 'Name' },
+        { key: 'role', label: 'Role' },
+      ],
+    },
+    gallery: {
+      imageField: 'photoUrl',
+      fields: [
+        { key: 'title', label: 'Title' },
+        { key: 'category', label: 'Category' },
+      ],
+    },
+    careers: {
+      fields: [
+        { key: 'title', label: 'Job title' },
+        { key: 'location', label: 'Location' },
+        { key: 'type', label: 'Type (e.g. Full-time)' },
+        { key: 'keywords', label: 'Ranking keywords (comma-separated)' },
+      ],
+    },
+    coreValues: {
+      fields: [
+        { key: 'title', label: 'Value name (e.g. Integrity)' },
+        { key: 'description', label: 'Description', textarea: true },
+      ],
+    },
+    resources: {
+      fileField: 'fileUrl',
+      fields: [
+        { key: 'title', label: 'Title' },
+        { key: 'category', label: 'Category (e.g. Guide, Checklist)' },
+        { key: 'description', label: 'Description', textarea: true },
+        { key: 'linkUrl', label: 'External link (optional, used if no file uploaded)' },
+      ],
+    },
+    announcements: {
+      fields: [
+        { key: 'text', label: 'Update text (shows in the homepage "At a Glance" strip)', textarea: true },
+      ],
+    },
+  };
+
+  // Singleton objects: one record each, edited as a form with a Save button
+  // instead of an add-new-row table.
+  const SINGLETON_FIELDS = {
+    settings: [
+      { key: 'address', label: 'Address' },
+      { key: 'phone', label: 'Phone' },
+      { key: 'email', label: 'Email', type: 'email' },
+      { key: 'linkedin', label: 'LinkedIn URL' },
+      { key: 'twitter', label: 'X / Twitter URL' },
+      { key: 'instagram', label: 'Instagram URL' },
+    ],
+    siteCopy: [
+      { key: 'heroHeadlines', label: 'Hero headlines — one per line, format: Headline text | Accent word (rotates automatically if more than one)', textarea: true, isHeadlineList: true },
+      { key: 'heroSubtext', label: 'Hero subtext', textarea: true },
+      { key: 'aboutEyebrow', label: 'About — small label above heading' },
+      { key: 'aboutHeadline', label: 'About — heading' },
+      { key: 'aboutParagraph1', label: 'About — paragraph 1', textarea: true },
+      { key: 'aboutParagraph2', label: 'About — paragraph 2', textarea: true },
+      { key: 'aboutStat1Value', label: 'About — stat 1 value (e.g. 12)' },
+      { key: 'aboutStat1Label', label: 'About — stat 1 label' },
+      { key: 'aboutStat2Value', label: 'About — stat 2 value (e.g. 240+)' },
+      { key: 'aboutStat2Label', label: 'About — stat 2 label' },
+      { key: 'footerTagline', label: 'Footer tagline', textarea: true },
+    ],
+    stats: [
+      { key: 'successRate', label: 'Success rate (e.g. 97%)' },
+      { key: 'auto.successRate', label: 'Auto-calculate success rate from completed requests', type: 'checkbox' },
+      { key: 'clientsServed', label: 'Clients served (e.g. 240+)' },
+      { key: 'auto.clientsServed', label: 'Auto-calculate clients served from registered accounts', type: 'checkbox' },
+      { key: 'support', label: 'Support (e.g. 24/7)' },
+      { key: 'certified', label: 'Certified (e.g. ISO 9001)' },
+    ],
+  };
+
+  const SINGLETON_LABELS = {
+    settings: 'Contact & social links',
+    siteCopy: 'Hero & About page copy',
+    stats: 'Homepage stat badges',
+  };
+
+  let currentCollection = 'services';
+  const isSingleton = (name) => Object.prototype.hasOwnProperty.call(SINGLETON_FIELDS, name);
+
+  function headlinesToText(headlines) {
+    if (!Array.isArray(headlines)) return '';
+    return headlines.map((h) => `${h.text} | ${h.accentWord || ''}`).join('\n');
+  }
+  function textToHeadlines(text) {
+    return text.split('\n').map((line) => line.trim()).filter(Boolean).map((line) => {
+      const [text, accentWord] = line.split('|').map((s) => (s || '').trim());
+      return { text, accentWord: accentWord || '' };
+    });
+  }
+
+  function cmsRenderForm() {
+    const form = document.getElementById('cmsForm');
+    if (isSingleton(currentCollection)) {
+      const fields = SINGLETON_FIELDS[currentCollection];
+      form.innerHTML = fields.map((f) => `
+        <div class="form-row"${f.isHeadlineList ? ' style="grid-column: 1 / -1"' : ''}>
+          <label>${f.label}</label>
+          ${f.type === 'checkbox'
+            ? `<input name="${f.key}" type="checkbox">`
+            : f.textarea
+              ? `<textarea name="${f.key}" ${f.isHeadlineList ? 'style="min-height:90px"' : ''}></textarea>`
+              : `<input name="${f.key}" type="${f.type || 'text'}">`}
+        </div>
+      `).join('') + `<button type="submit" class="btn btn-primary btn-sm">Save ${escapeHtml(SINGLETON_LABELS[currentCollection].toLowerCase())}</button>`;
+      return;
+    }
+    const config = CMS_FIELDS[currentCollection];
+    let html = config.fields.map((f) => `
+      <div class="form-row">
+        <label>${f.label}</label>
+        ${f.textarea ? `<textarea name="${f.key}"></textarea>` : `<input name="${f.key}">`}
+      </div>
+    `).join('');
+    if (config.imageField) {
+      html += `<div class="form-row"><label>Photo</label><input type="file" name="__image" accept="image/*"></div>`;
+    }
+    if (config.fileField) {
+      html += `<div class="form-row"><label>File (PDF or Word, optional)</label><input type="file" name="__file" accept=".pdf,.doc,.docx"></div>`;
+    }
+    form.innerHTML = html + '<button type="submit" class="btn btn-primary btn-sm">Add</button>';
+  }
+
+  async function cmsLoadTable() {
+    const head = document.getElementById('cmsTableHead');
+    const body = document.getElementById('cmsTableBody');
+
+    if (isSingleton(currentCollection)) {
+      document.getElementById('cmsFormTitle').textContent = SINGLETON_LABELS[currentCollection];
+      head.innerHTML = '';
+      body.innerHTML = '';
+      const data = await window.PEVApi.adminGetSingleton(currentCollection);
+      const form = document.getElementById('cmsForm');
+      Object.entries(data).forEach(([key, value]) => {
+        if (key === 'heroHeadlines') {
+          const input = form.querySelector('[name="heroHeadlines"]');
+          if (input) input.value = headlinesToText(value);
+          return;
+        }
+        if (key === 'auto' && value && typeof value === 'object') {
+          Object.entries(value).forEach(([autoKey, autoVal]) => {
+            const cb = form.querySelector(`[name="auto.${autoKey}"]`);
+            if (cb) cb.checked = !!autoVal;
+          });
+          return;
+        }
+        const input = form.querySelector(`[name="${key}"]`);
+        if (input) input.value = value;
+      });
+      return;
+    }
+
+    document.getElementById('cmsFormTitle').textContent = 'Add new';
+    const config = CMS_FIELDS[currentCollection];
+    const fields = config.fields;
+    const extraHead = config.imageField ? '<th>Photo</th>' : config.fileField ? '<th>File</th>' : '';
+    head.innerHTML = `<tr>${extraHead}${fields.map((f) => `<th>${f.label}</th>`).join('')}<th>Actions</th></tr>`;
+
+    const items = await window.PEVApi.adminGetContent(currentCollection);
+    if (!items.length) {
+      body.innerHTML = `<tr><td colspan="${fields.length + 2}">No items yet.</td></tr>`;
+      return;
+    }
+    body.innerHTML = items.map((item) => {
+      let mediaCell = '';
+      if (config.imageField) {
+        const url = item[config.imageField];
+        mediaCell = `<td>
+          ${url ? `<img src="${escapeHtml(url)}" alt="" style="width:52px;height:52px;border-radius:8px;object-fit:cover">` : `<div style="width:52px;height:52px;border-radius:8px;background:var(--surface-glass);display:grid;place-items:center;font-size:.65rem;color:var(--text-muted)">None</div>`}
+          <br><button type="button" class="btn btn-ghost btn-sm cms-media-btn" style="margin-top:.3rem">Upload</button>
+          <input type="file" class="cms-media-input" accept="image/*" style="display:none">
+        </td>`;
+      } else if (config.fileField) {
+        const url = item[config.fileField];
+        mediaCell = `<td>
+          ${url ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="font-size:var(--step--1)">View file</a>` : '<span style="font-size:var(--step--1); color:var(--text-muted)">None</span>'}
+          <br><button type="button" class="btn btn-ghost btn-sm cms-media-btn" style="margin-top:.3rem">Upload</button>
+          <input type="file" class="cms-media-input" accept=".pdf,.doc,.docx" style="display:none">
+        </td>`;
+      }
+      return `
+      <tr data-id="${item.id}">
+        ${mediaCell}
+        ${fields.map((f) => `<td class="cms-cell" data-field="${f.key}">${escapeHtml(Array.isArray(item[f.key]) ? item[f.key].join(', ') : (item[f.key] || ''))}</td>`).join('')}
+        <td class="row-actions">
+          <button type="button" class="btn btn-ghost btn-sm cms-edit"><i class="fa-solid fa-pen"></i></button>
+          <button type="button" class="btn btn-ghost btn-sm cms-delete"><i class="fa-solid fa-trash"></i></button>
+        </td>
+      </tr>
+    `;
+    }).join('');
+
+    body.querySelectorAll('.cms-media-btn').forEach((btn) => {
+      btn.addEventListener('click', () => btn.nextElementSibling.click());
+    });
+    body.querySelectorAll('.cms-media-input').forEach((input) => {
+      input.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const tr = input.closest('tr');
+        const btn = input.previousElementSibling;
+        btn.disabled = true;
+        btn.textContent = 'Uploading…';
+        try {
+          const formData = new FormData();
+          const isImage = !!config.imageField;
+          formData.append(isImage ? 'image' : 'file', file);
+          const { url } = isImage ? await window.PEVApi.adminUploadImage(formData) : await window.PEVApi.adminUploadFile(formData);
+          const field = config.imageField || config.fileField;
+          await window.PEVApi.adminUpdateContent(currentCollection, tr.dataset.id, { [field]: url });
+          await cmsLoadTable();
+        } catch (err) {
+          alert('Could not upload: ' + (err.message || 'unknown error'));
+          btn.disabled = false;
+          btn.textContent = 'Upload';
+        }
+      });
+    });
+
+    body.querySelectorAll('.cms-delete').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const tr = btn.closest('tr');
+        if (!confirm('Delete this item? This cannot be undone.')) return;
+        try {
+          await window.PEVApi.adminDeleteContent(currentCollection, tr.dataset.id);
+          await cmsLoadTable();
+        } catch (e) {
+          alert('Could not delete: ' + (e.message || 'unknown error'));
+        }
+      });
+    });
+
+    body.querySelectorAll('.cms-edit').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tr = btn.closest('tr');
+        const isEditing = tr.classList.toggle('editing');
+        tr.querySelectorAll('.cms-cell').forEach((td) => {
+          const field = td.dataset.field;
+          if (isEditing) {
+            const val = td.textContent;
+            const isTextarea = CMS_FIELDS[currentCollection].fields.find((f) => f.key === field && f.textarea);
+            td.dataset.original = val;
+            td.innerHTML = isTextarea ? `<textarea class="cell-input">${escapeHtml(val)}</textarea>` : `<input class="cell-input" value="${escapeHtml(val)}">`;
+          }
+        });
+        btn.innerHTML = isEditing ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-pen"></i>';
+
+        if (!isEditing) {
+          // Save
+          const payload = {};
+          tr.querySelectorAll('.cms-cell').forEach((td) => {
+            const field = td.dataset.field;
+            const input = td.querySelector('.cell-input');
+            let value = input ? input.value : td.textContent;
+            if (field === 'keywords') value = value.split(',').map((s) => s.trim()).filter(Boolean);
+            payload[field] = value;
+            td.textContent = Array.isArray(value) ? value.join(', ') : value;
+          });
+          window.PEVApi.adminUpdateContent(currentCollection, tr.dataset.id, payload).catch((e) => {
+            alert('Could not save: ' + (e.message || 'unknown error'));
+            cmsLoadTable();
+          });
+        }
+      });
+    });
+  }
+
+  document.getElementById('cmsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const formData = new FormData(form);
+    const payload = {};
+    formData.forEach((value, key) => {
+      if (key === '__image' || key === '__file') return; // handled separately below
+      if (key === 'keywords') { payload[key] = value.split(',').map((s) => s.trim()).filter(Boolean); return; }
+      if (key === 'heroHeadlines') { payload[key] = textToHeadlines(value); return; }
+      if (key.startsWith('auto.')) {
+        payload.auto = payload.auto || {};
+        payload.auto[key.slice(5)] = true;
+        return;
+      }
+      payload[key] = value;
+    });
+    // Unchecked checkboxes never appear in FormData, so fill in `false`
+    // for any auto-calc box currently rendered but not checked.
+    if (isSingleton(currentCollection)) {
+      form.querySelectorAll('input[type="checkbox"][name^="auto."]').forEach((cb) => {
+        payload.auto = payload.auto || {};
+        const key = cb.name.slice(5);
+        if (!(key in payload.auto)) payload.auto[key] = false;
+      });
+    }
+
+    submitBtn.disabled = true;
+    const originalLabel = submitBtn.textContent;
+    submitBtn.textContent = 'Saving…';
+
+    try {
+      if (isSingleton(currentCollection)) {
+        await window.PEVApi.adminUpdateSingleton(currentCollection, payload);
+      } else {
+        const config = CMS_FIELDS[currentCollection];
+        const imageFile = form.querySelector('[name="__image"]');
+        const docFile = form.querySelector('[name="__file"]');
+        if (config.imageField && imageFile && imageFile.files[0]) {
+          const fd = new FormData();
+          fd.append('image', imageFile.files[0]);
+          const { url } = await window.PEVApi.adminUploadImage(fd);
+          payload[config.imageField] = url;
+        }
+        if (config.fileField && docFile && docFile.files[0]) {
+          const fd = new FormData();
+          fd.append('file', docFile.files[0]);
+          const { url } = await window.PEVApi.adminUploadFile(fd);
+          payload[config.fileField] = url;
+        }
+        await window.PEVApi.adminCreateContent(currentCollection, payload);
+        form.reset();
+      }
+      await cmsLoadTable();
+    } catch (err) {
+      let msg = err.message || 'Save failed.';
+      if (err.fields) msg = Object.values(err.fields).join(' ');
+      alert(msg);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
+    }
+  });
+
+  document.getElementById('cmsSubTabs').addEventListener('click', (e) => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('#cmsSubTabs .filter-btn').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCollection = btn.dataset.collection;
+    cmsRenderForm();
+    cmsLoadTable();
+  });
+
+  /* ---------- Users ---------- */
+  async function loadUsers() {
+    const body = document.getElementById('usersBody');
+    const users = await window.PEVApi.adminUsers();
+    if (!users.length) {
+      body.innerHTML = '<tr><td colspan="5">No registered accounts yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = users.map((u) => `
+      <tr>
+        <td>${escapeHtml(u.name)}</td>
+        <td>${escapeHtml(u.email)}</td>
+        <td>${u.role === 'company' ? 'Company' : 'Individual'}</td>
+        <td>${escapeHtml(u.companyName || '—')}</td>
+        <td>${new Date(u.createdAt).toLocaleDateString()}</td>
+      </tr>
+    `).join('');
+  }
+
+  /* ---------- Company account approvals ---------- */
+  async function loadCompanyApprovals() {
+    const body = document.getElementById('companyApprovalsBody');
+    const accounts = await window.PEVApi.adminGetCompanyAccounts();
+    const pending = accounts.filter((a) => a.status === 'pending');
+    if (!pending.length) {
+      body.innerHTML = '<tr><td colspan="6">No company accounts waiting on a decision.</td></tr>';
+      return;
+    }
+    body.innerHTML = pending.map((a) => `
+      <tr data-id="${escapeHtml(a.id)}">
+        <td>${escapeHtml(a.name)}</td>
+        <td>${escapeHtml(a.email)}</td>
+        <td>${escapeHtml(a.companyName || '—')}</td>
+        <td>${escapeHtml(a.contactTitle || '—')}</td>
+        <td>${new Date(a.createdAt).toLocaleDateString()}</td>
+        <td>
+          <button type="button" class="btn btn-primary btn-sm approval-approve">Approve</button>
+          <button type="button" class="btn btn-ghost btn-sm approval-reject">Reject</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  document.getElementById('companyApprovalsBody').addEventListener('click', async (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const tr = btn.closest('tr');
+    const id = tr.dataset.id;
+    const status = btn.classList.contains('approval-approve') ? 'active' : 'rejected';
+    btn.disabled = true;
+    try {
+      await window.PEVApi.adminDecideCompanyAccount(id, status);
+      await loadCompanyApprovals();
+      await loadUsers();
+    } catch (err) {
+      alert('Could not save decision: ' + (err.message || 'unknown error'));
+      btn.disabled = false;
+    }
+  });
+
+  /* ---------- Staff accounts ---------- */
+  let cachedStaffCategories = null;
+  async function getStaffCategories() {
+    if (!cachedStaffCategories) {
+      // Fetched from the backend rather than hardcoded here, so this list
+      // can never silently drift out of sync with what the server actually
+      // accepts (a stale local list previously caused a category like
+      // "Accountant" to have no matching <option>, which meant an account
+      // in that category couldn't be edited without corrupting its
+      // category on save).
+      cachedStaffCategories = await window.PEVApi.adminGetStaffCategories();
+    }
+    return cachedStaffCategories;
+  }
+
+  function categoryOptionsHtml(categories, selected) {
+    return categories.map((c) => `<option value="${c}" ${c === selected ? 'selected' : ''}>${c}</option>`).join('');
+  }
+
+  async function loadStaff() {
+    const categories = await getStaffCategories();
+    document.getElementById('staffCategorySelect').innerHTML = categoryOptionsHtml(categories, 'Staff');
+
+    const body = document.getElementById('staffBody');
+    const staff = await window.PEVApi.adminGetStaff();
+    const me = window.PEVApi.getUser();
+    if (!staff.length) {
+      body.innerHTML = '<tr><td colspan="8">No staff accounts yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = staff.map((s) => `
+      <tr data-id="${s.id}">
+        <td>
+          ${s.photoUrl ? `<img src="${escapeHtml(s.photoUrl)}" alt="" style="width:44px;height:44px;border-radius:50%;object-fit:cover">` : `<div style="width:44px;height:44px;border-radius:50%;background:var(--surface-glass);display:grid;place-items:center;font-size:.7rem;color:var(--text-muted)">—</div>`}
+          <br><button type="button" class="btn btn-ghost btn-sm staff-photo-btn" style="margin-top:.35rem">Upload</button>
+          <input type="file" class="staff-photo-input" accept="image/*" style="display:none">
+        </td>
+        <td>${escapeHtml(s.name)}${s.id === (me && me.id) ? ' <span style="color:var(--text-muted); font-size:var(--step--1)">(you)</span>' : ''}</td>
+        <td style="font-size:var(--step--1)">${escapeHtml(s.email)}</td>
+        <td>
+          <select class="status-select staff-category-select">
+            ${categoryOptionsHtml(categories, s.category)}
+          </select>
+        </td>
+        <td><input class="cell-input staff-title-input" value="${escapeHtml(s.title || '')}" style="width:140px"></td>
+        <td><textarea class="cell-input staff-bio-input" style="width:180px; min-height:44px">${escapeHtml(s.bio || '')}</textarea></td>
+        <td style="text-align:center"><input type="checkbox" class="staff-featured-checkbox" ${s.featured ? 'checked' : ''} style="width:auto"></td>
+        <td class="row-actions">
+          <button type="button" class="btn btn-ghost btn-sm staff-save" title="Save changes" aria-label="Save changes"><i class="fa-solid fa-check"></i> Save</button>
+          ${s.id === (me && me.id) ? '' : `<button type="button" class="btn btn-ghost btn-sm staff-delete"><i class="fa-solid fa-trash"></i></button>`}
+        </td>
+      </tr>
+    `).join('');
+
+    body.querySelectorAll('tr[data-id]').forEach((tr) => {
+      const id = tr.dataset.id;
+
+      tr.querySelector('.staff-photo-btn').addEventListener('click', () => {
+        tr.querySelector('.staff-photo-input').click();
+      });
+      tr.querySelector('.staff-photo-input').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const btn = tr.querySelector('.staff-photo-btn');
+        btn.disabled = true;
+        btn.textContent = 'Uploading…';
+        try {
+          const formData = new FormData();
+          formData.append('image', file);
+          const { url } = await window.PEVApi.adminUploadImage(formData);
+          await window.PEVApi.adminUpdateStaff(id, { photoUrl: url });
+          await loadStaff();
+        } catch (err) {
+          alert('Could not upload photo: ' + (err.message || 'unknown error'));
+          btn.disabled = false;
+          btn.textContent = 'Upload';
+        }
+      });
+
+      tr.querySelector('.staff-save').addEventListener('click', async () => {
+        const payload = {
+          category: tr.querySelector('.staff-category-select').value,
+          title: tr.querySelector('.staff-title-input').value,
+          bio: tr.querySelector('.staff-bio-input').value,
+          featured: tr.querySelector('.staff-featured-checkbox').checked,
+        };
+        try {
+          await window.PEVApi.adminUpdateStaff(id, payload);
+          await loadStaff();
+        } catch (err) {
+          alert('Could not save: ' + (err.message || 'unknown error'));
+        }
+      });
+
+      const deleteBtn = tr.querySelector('.staff-delete');
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', async () => {
+          if (!confirm('Remove this staff account? They will lose admin access immediately.')) return;
+          try {
+            await window.PEVApi.adminDeleteStaff(id);
+            await loadStaff();
+          } catch (e) {
+            alert('Could not remove staff account: ' + (e.message || 'unknown error'));
+          }
+        });
+      }
+    });
+  }
+
+  document.getElementById('staffForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const status = document.getElementById('staffStatus');
+    const btn = form.querySelector('button[type="submit"]');
+    status.className = 'form-status';
+    btn.disabled = true;
+    btn.textContent = 'Creating…';
+    try {
+      const formData = new FormData(form);
+      await window.PEVApi.adminCreateStaff({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+        category: formData.get('category'),
+        title: formData.get('title'),
+        bio: formData.get('bio'),
+        featured: formData.get('featured') === 'on',
+      });
+      status.textContent = 'Staff account created.';
+      status.className = 'form-status success show';
+      form.reset();
+      await loadStaff();
+    } catch (err) {
+      let msg = err.message || 'Could not create staff account.';
+      if (err.fields) msg = Object.values(err.fields).join(' ');
+      status.textContent = msg;
+      status.className = 'form-status error show';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Create staff account';
+    }
+  });
+
+  /* ---------- Messages ---------- */
+  async function loadMessages() {
+    const body = document.getElementById('messagesBody');
+    const messages = await window.PEVApi.adminMessages();
+    if (!messages.length) {
+      body.innerHTML = '<tr><td colspan="4">No messages yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = messages.map((m) => `
+      <tr>
+        <td>${escapeHtml(m.name)}</td>
+        <td>${escapeHtml(m.email)}</td>
+        <td>${escapeHtml(m.message.slice(0, 60))}${m.message.length > 60 ? '…' : ''}</td>
+        <td>${new Date(m.receivedAt).toLocaleString()}</td>
+      </tr>
+    `).join('');
+  }
+
+  /* ---------- Notification log ---------- */
+  async function loadNotifications() {
+    const body = document.getElementById('notificationsBody');
+    const note = document.getElementById('smtpStatusNote');
+    const log = await window.PEVApi.adminGetNotifications();
+
+    if (!log.length) {
+      body.innerHTML = '<tr><td colspan="4">No notifications sent yet — change a status somewhere to see one appear here.</td></tr>';
+      note.textContent = '';
+      return;
+    }
+
+    const anySimulated = log.some((n) => n.simulated);
+    note.innerHTML = anySimulated
+      ? ' <strong style="color:var(--accent)">SMTP is not configured — these are logged, not actually delivered.</strong> Set SMTP_HOST etc. to send real emails.'
+      : '';
+
+    body.innerHTML = log.map((n) => `
+      <tr>
+        <td>${escapeHtml(n.to)}</td>
+        <td>${escapeHtml(n.subject)}</td>
+        <td>${new Date(n.sentAt).toLocaleString()}</td>
+        <td><span class="status-badge ${n.delivered ? 'read' : 'new'}">${n.delivered ? 'Delivered' : n.simulated ? 'Simulated' : 'Failed'}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  /* ---------- Email requests ---------- */
+  const MAIL_STATUS_LABEL = { pending: 'Pending', approved: 'Approved', denied: 'Denied' };
+  const MAIL_STATUS_OPTIONS = ['pending', 'approved', 'denied'];
+
+  async function loadEmailRequests() {
+    const body = document.getElementById('emailRequestsBody');
+    const requests = await window.PEVApi.adminGetEmailRequests();
+    if (!requests.length) {
+      body.innerHTML = '<tr><td colspan="7">No email requests yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = requests.map((r) => `
+      <tr data-id="${r.id}">
+        <td>${escapeHtml(r.userName)}<br><span style="color:var(--text-muted); font-size:var(--step--1)">${escapeHtml(r.userEmail)}</span></td>
+        <td>${r.userRole === 'company' ? 'Company' : r.userRole === 'admin' ? 'Staff' : 'Individual'}</td>
+        <td>${escapeHtml(r.requestedAddress || '—')}</td>
+        <td>${escapeHtml(r.reason.slice(0, 60))}${r.reason.length > 60 ? '…' : ''}</td>
+        <td>${new Date(r.createdAt).toLocaleDateString()}</td>
+        <td>
+          <select class="status-select mail-status-select">
+            ${MAIL_STATUS_OPTIONS.map((s) => `<option value="${s}" ${s === r.status ? 'selected' : ''}>${MAIL_STATUS_LABEL[s]}</option>`).join('')}
+          </select>
+        </td>
+        <td><input class="cell-input mail-note-input" value="${escapeHtml(r.adminNote || '')}" placeholder="Optional note" style="width:140px"></td>
+      </tr>
+    `).join('');
+
+    body.querySelectorAll('tr[data-id]').forEach((tr) => {
+      const id = tr.dataset.id;
+      const save = async () => {
+        try {
+          await window.PEVApi.adminUpdateEmailRequest(id, {
+            status: tr.querySelector('.mail-status-select').value,
+            adminNote: tr.querySelector('.mail-note-input').value,
+          });
+          loadNotifications().catch(() => {});
+        } catch (e) {
+          alert('Could not update: ' + (e.message || 'unknown error'));
+        }
+      };
+      tr.querySelector('.mail-status-select').addEventListener('change', save);
+      tr.querySelector('.mail-note-input').addEventListener('blur', save);
+    });
+  }
+
+  /* ---------- Partner applications ---------- */
+  const PARTNER_STATUS_LABEL = { pending: 'Pending', approved: 'Approved', rejected: 'Rejected' };
+  const PARTNER_STATUS_OPTIONS = ['pending', 'approved', 'rejected'];
+
+  async function loadPartners() {
+    const body = document.getElementById('partnersBody');
+    const apps = await window.PEVApi.adminGetPartners();
+    if (!apps.length) {
+      body.innerHTML = '<tr><td colspan="7">No partner applications yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = apps.map((p) => `
+      <tr data-id="${p.id}">
+        <td>${escapeHtml(p.name)}<br><span style="color:var(--text-muted); font-size:var(--step--1)">${escapeHtml(p.email)}</span></td>
+        <td>${escapeHtml(p.organization || '—')}</td>
+        <td>${escapeHtml(p.partnershipType || '—')}</td>
+        <td>${escapeHtml(p.message.slice(0, 60))}${p.message.length > 60 ? '…' : ''}</td>
+        <td>${new Date(p.createdAt).toLocaleDateString()}</td>
+        <td>
+          <select class="status-select partner-status-select">
+            ${PARTNER_STATUS_OPTIONS.map((s) => `<option value="${s}" ${s === p.status ? 'selected' : ''}>${PARTNER_STATUS_LABEL[s]}</option>`).join('')}
+          </select>
+        </td>
+        <td><input class="cell-input partner-note-input" value="${escapeHtml(p.adminNote || '')}" placeholder="Optional note" style="width:140px"></td>
+      </tr>
+    `).join('');
+
+    body.querySelectorAll('tr[data-id]').forEach((tr) => {
+      const id = tr.dataset.id;
+      const save = async () => {
+        try {
+          await window.PEVApi.adminUpdatePartner(id, {
+            status: tr.querySelector('.partner-status-select').value,
+            adminNote: tr.querySelector('.partner-note-input').value,
+          });
+          await loadKpis();
+        } catch (e) {
+          alert('Could not update: ' + (e.message || 'unknown error'));
+        }
+      };
+      tr.querySelector('.partner-status-select').addEventListener('change', save);
+      tr.querySelector('.partner-note-input').addEventListener('blur', save);
+    });
+  }
+
+  /* ---------- Bookings ---------- */
+  const BOOKING_STATUS_LABEL = { pending: 'Pending', confirmed: 'Confirmed', cancelled: 'Cancelled' };
+  const BOOKING_STATUS_OPTIONS = ['pending', 'confirmed', 'cancelled'];
+
+  async function loadBookings() {
+    const body = document.getElementById('bookingsBody');
+    const bookings = await window.PEVApi.adminGetBookings();
+    if (!bookings.length) {
+      body.innerHTML = '<tr><td colspan="6">No bookings yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = bookings.map((b) => `
+      <tr data-id="${b.id}">
+        <td>${escapeHtml(b.userName)} <span style="color:var(--text-muted); font-size:var(--step--1)">(${b.userRole === 'company' ? 'Company' : 'Individual'})</span></td>
+        <td>${escapeHtml(b.topic)}</td>
+        <td>${escapeHtml(b.preferredDate)}${b.preferredTime ? ' ' + escapeHtml(b.preferredTime) : ''}</td>
+        <td>${escapeHtml((b.notes || '').slice(0, 50))}</td>
+        <td>${new Date(b.createdAt).toLocaleDateString()}</td>
+        <td>
+          <select class="status-select booking-status-select">
+            ${BOOKING_STATUS_OPTIONS.map((s) => `<option value="${s}" ${s === b.status ? 'selected' : ''}>${BOOKING_STATUS_LABEL[s]}</option>`).join('')}
+          </select>
+        </td>
+      </tr>
+    `).join('');
+
+    body.querySelectorAll('.booking-status-select').forEach((sel) => {
+      sel.addEventListener('change', async () => {
+        const tr = sel.closest('tr');
+        sel.disabled = true;
+        try {
+          await window.PEVApi.adminUpdateBooking(tr.dataset.id, { status: sel.value });
+          loadNotifications().catch(() => {});
+        } catch (e) {
+          alert('Could not update: ' + (e.message || 'unknown error'));
+        } finally {
+          sel.disabled = false;
+        }
+      });
+    });
+  }
+
+  /* ---------- Invoices ---------- */
+  const INVOICE_STATUS_LABEL = { unpaid: 'Unpaid', paid: 'Paid', overdue: 'Overdue', cancelled: 'Cancelled' };
+  const INVOICE_STATUS_OPTIONS = ['unpaid', 'paid', 'overdue', 'cancelled'];
+
+  async function populateInvoiceUserSelect() {
+    const select = document.getElementById('invoiceUserSelect');
+    const users = await window.PEVApi.adminUsers();
+    select.innerHTML = '<option value="">Select…</option>' + users.map((u) => `<option value="${u.id}">${escapeHtml(u.name)} (${u.role === 'company' ? u.companyName : 'Individual'})</option>`).join('');
+  }
+
+  async function loadInvoices() {
+    const body = document.getElementById('invoicesBody');
+    const invoices = await window.PEVApi.adminGetInvoices();
+    if (!invoices.length) {
+      body.innerHTML = '<tr><td colspan="6">No invoices yet.</td></tr>';
+      return;
+    }
+    body.innerHTML = invoices.map((inv) => `
+      <tr data-id="${inv.id}">
+        <td>${escapeHtml(inv.invoiceNumber)}</td>
+        <td>${escapeHtml(inv.userName)}</td>
+        <td>${escapeHtml(inv.description)}</td>
+        <td>${escapeHtml(inv.currency)} ${inv.amount.toLocaleString()}</td>
+        <td>${new Date(inv.dueDate).toLocaleDateString()}</td>
+        <td>
+          <select class="status-select invoice-status-select">
+            ${INVOICE_STATUS_OPTIONS.map((s) => `<option value="${s}" ${s === inv.status ? 'selected' : ''}>${INVOICE_STATUS_LABEL[s]}</option>`).join('')}
+          </select>
+        </td>
+      </tr>
+    `).join('');
+
+    body.querySelectorAll('.invoice-status-select').forEach((sel) => {
+      sel.addEventListener('change', async () => {
+        const tr = sel.closest('tr');
+        sel.disabled = true;
+        try {
+          await window.PEVApi.adminUpdateInvoice(tr.dataset.id, { status: sel.value });
+          loadNotifications().catch(() => {});
+        } catch (e) {
+          alert('Could not update: ' + (e.message || 'unknown error'));
+        } finally {
+          sel.disabled = false;
+        }
+      });
+    });
+  }
+
+  document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const status = document.getElementById('invoiceStatus');
+    const btn = form.querySelector('button[type="submit"]');
+    const formData = new FormData(form);
+    status.className = 'form-status';
+    btn.disabled = true;
+    btn.textContent = 'Creating…';
+    try {
+      await window.PEVApi.adminCreateInvoice({
+        userId: formData.get('userId'),
+        description: formData.get('description'),
+        amount: formData.get('amount'),
+        currency: formData.get('currency'),
+        dueDate: formData.get('dueDate'),
+      });
+      status.textContent = 'Invoice created.';
+      status.className = 'form-status success show';
+      form.reset();
+      form.querySelector('[name="currency"]').value = 'USD';
+      await loadInvoices();
+    } catch (err) {
+      let msg = err.message || 'Could not create invoice.';
+      if (err.fields) msg = Object.values(err.fields).join(' ');
+      status.textContent = msg;
+      status.className = 'form-status error show';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Create invoice';
+    }
+  });
+
+  /* ---------- Reports ---------- */
+  const REPORT_LABELS = {
+    requests: 'Service & Project Requests', applications: 'Job Applications', partners: 'Partner Applications',
+    bookings: 'Bookings', invoices: 'Invoices', email_requests: 'Official Email Requests',
+  };
+
+  async function populateReportTypeSelect() {
+    const select = document.getElementById('reportTypeSelect');
+    const types = await window.PEVApi.adminGetReportTypes();
+    select.innerHTML = types.map((t) => `<option value="${t}">${REPORT_LABELS[t] || t}</option>`).join('');
+  }
+
+  let currentReport = null;
+
+  document.getElementById('reportForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('button[type="submit"]');
+    const formData = new FormData(form);
+    const type = formData.get('type');
+    const from = formData.get('from');
+    const to = formData.get('to');
+
+    btn.disabled = true;
+    btn.textContent = 'Generating…';
+    try {
+      const report = await window.PEVApi.adminGenerateReport(type, from, to);
+      currentReport = report;
+      renderReport(report);
+    } catch (err) {
+      alert('Could not generate report: ' + (err.message || 'unknown error'));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate';
+    }
+  });
+
+  document.getElementById('reportExportBtn').addEventListener('click', async () => {
+    if (!currentReport) return;
+    try {
+      await window.PEVApi.adminExportReport(currentReport.type, currentReport.from, currentReport.to);
+    } catch (e) {
+      alert('Could not export: ' + (e.message || 'unknown error'));
+    }
+  });
+
+  function renderReport(report) {
+    const resultsEl = document.getElementById('reportResults');
+    const summaryEl = document.getElementById('reportSummary');
+    const headEl = document.getElementById('reportTableHead');
+    const bodyEl = document.getElementById('reportTableBody');
+    const heading = document.getElementById('reportRowsHeading');
+
+    resultsEl.style.display = 'block';
+    heading.textContent = `${REPORT_LABELS[report.type] || report.type} — ${report.rowCount} record${report.rowCount === 1 ? '' : 's'}`;
+
+    const summaryCards = [`<div class="glass-card"><h4 style="margin-bottom:.35em">Total</h4><p style="margin:0; font-size:var(--step-1); color:var(--accent)">${report.rowCount}</p></div>`];
+    Object.entries(report.breakdown || {}).forEach(([key, value]) => {
+      if (typeof value === 'object') {
+        const inner = Object.entries(value).map(([k, v]) => `${escapeHtml(k)}: ${v}`).join(' · ');
+        summaryCards.push(`<div class="glass-card"><h4 style="margin-bottom:.35em">${escapeHtml(key)}</h4><p style="margin:0; font-size:var(--step--1)">${inner || '—'}</p></div>`);
+      } else {
+        summaryCards.push(`<div class="glass-card"><h4 style="margin-bottom:.35em">${escapeHtml(key)}</h4><p style="margin:0; font-size:var(--step-1); color:var(--accent)">${value}</p></div>`);
+      }
+    });
+    summaryEl.innerHTML = summaryCards.join('');
+
+    if (!report.rows.length) {
+      headEl.innerHTML = '';
+      bodyEl.innerHTML = '<tr><td>No records in this range.</td></tr>';
+      return;
+    }
+    const columns = Object.keys(report.rows[0]).filter((c) => !['userId', 'resumeStoredName'].includes(c)).slice(0, 7);
+    headEl.innerHTML = `<tr>${columns.map((c) => `<th>${escapeHtml(c)}</th>`).join('')}</tr>`;
+    bodyEl.innerHTML = report.rows.slice(0, 50).map((row) => `
+      <tr>${columns.map((c) => `<td>${escapeHtml(String(row[c] ?? '—').slice(0, 60))}</td>`).join('')}</tr>
+    `).join('');
+  }
+
+  /* ---------- Tabs ---------- */
+  document.querySelectorAll('.admin-tabs .filter-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.admin-tabs .filter-btn').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.admin-panel').forEach((p) => p.classList.remove('active'));
+      document.getElementById(btn.dataset.panel).classList.add('active');
+    });
+  });
+
+  /* ---------- Bootstrap ---------- */
+  (async function () {
+    const gate = document.getElementById('authGate');
+    const content = document.getElementById('portalContent');
+
+    if (!window.PEVApi.isAuthed()) {
+      gate.style.display = 'flex';
+      return;
+    }
+
+    try {
+      const { user } = await window.PEVApi.me();
+      if (user.role !== 'admin') {
+        gate.style.display = 'flex';
+        document.getElementById('gateMsg').innerHTML = `This portal is for staff accounts only. <a href="${window.PEVApi.portalPathForRole(user.role)}" style="color:var(--accent)">Go to your portal</a>`;
+        return;
+      }
+
+      document.getElementById('welcomeMsg').textContent = 'Welcome, ' + user.name;
+      content.style.display = 'block';
+
+      // Hide tabs (and skip their data loads) the account's category doesn't
+      // grant — an Accountant or HR account should never even see a tab it
+      // would get a 403 from, let alone one stuck on "Loading…" forever.
+      const myPermissions = user.permissions || [];
+      const tabButtons = [...document.querySelectorAll('.admin-tabs .filter-btn')];
+      const visibleTabs = [];
+      tabButtons.forEach((btn) => {
+        const perm = btn.dataset.perm;
+        const allowed = !perm || myPermissions.includes(perm);
+        btn.style.display = allowed ? '' : 'none';
+        if (allowed) visibleTabs.push(btn);
+      });
+
+      // If the default-active tab ("Requests") got hidden, activate the
+      // first tab this account actually has.
+      if (visibleTabs.length && !visibleTabs.some((b) => b.classList.contains('active'))) {
+        tabButtons.forEach((b) => b.classList.remove('active'));
+        document.querySelectorAll('.admin-panel').forEach((p) => p.classList.remove('active'));
+        visibleTabs[0].classList.add('active');
+        document.getElementById(visibleTabs[0].dataset.panel).classList.add('active');
+      }
+
+      const has = (perm) => myPermissions.includes(perm);
+      const tasks = [loadKpis()]; // summary KPIs are open to every staff account
+      if (has('requests')) tasks.push(loadRequests());
+      if (has('users')) tasks.push(loadUsers());
+      if (has('users')) tasks.push(loadCompanyApprovals());
+      if (has('staff')) tasks.push(loadStaff());
+      if (has('email_requests')) tasks.push(loadEmailRequests());
+      if (has('partners')) tasks.push(loadPartners());
+      if (has('bookings')) tasks.push(loadBookings());
+      if (has('invoices')) { tasks.push(populateInvoiceUserSelect()); tasks.push(loadInvoices()); }
+      if (has('reports')) { tasks.push(populateReportTypeSelect()); }
+      if (has('messages')) tasks.push(loadMessages());
+      if (has('reports')) tasks.push(loadNotifications());
+      if (has('applications')) tasks.push(loadApplicationsSummary().then(loadApplications));
+      if (has('content')) { cmsRenderForm(); tasks.push(cmsLoadTable()); }
+
+      await Promise.all(tasks);
+    } catch (err) {
+      gate.style.display = 'flex';
+      document.getElementById('gateMsg').textContent = 'Your session has expired. Please log in again.';
+      window.PEVApi.logout();
+    }
+  })();
+
+  document.getElementById('logoutBtn').addEventListener('click', function () {
+    window.PEVApi.logout();
+    window.location.href = '/';
+  });
+</script>
+</body>
+</html>

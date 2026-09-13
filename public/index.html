@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime Elite Ventures — Strategy, Finance & Operations Advisory</title>
+<meta name="description" content="Prime Elite Ventures is a Nairobi-based advisory firm delivering strategy, financial structuring, operations, and digital transformation for ambitious businesses.">
+<meta name="keywords" content="business advisory, strategy consulting, financial structuring, operations optimisation, digital transformation, Nairobi consulting firm">
+<meta name="author" content="Prime Elite Ventures">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.primeeliteventures.example/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Prime Elite Ventures — Strategy, Finance & Operations Advisory">
+<meta property="og:description" content="Board-level strategy, financial structuring, and operations advisory for ambitious businesses.">
+<meta property="og:url" content="https://www.primeeliteventures.example/">
+<meta property="og:site_name" content="Prime Elite Ventures">
+<meta property="og:image" content="/img/og-cover.jpg">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Prime Elite Ventures">
+<meta name="twitter:description" content="Board-level strategy, financial structuring, and operations advisory for ambitious businesses.">
+<meta name="twitter:image" content="/img/og-cover.jpg">
+
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b1220">
+
+<!-- Favicons -->
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/img/favicon.ico">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+
+<!-- Preconnects -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+<!-- Fonts: preload + onload swap -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<!-- Tailwind via CDN, deferred for print media trick to not block render -->
+<script src="https://cdn.tailwindcss.com" media="print" onload="this.media='all'"></script>
+
+<meta name="color-scheme" content="light dark">
+
+<link rel="stylesheet" href="/css/modern-design-system.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/hero.css">
+<link rel="stylesheet" href="/css/dark-mode.css">
+<link rel="stylesheet" href="/css/premium-design.css">
+</head>
+<body>
+
+<div id="page-loader" aria-hidden="true">
+  <div class="loader-mark">PEV</div>
+</div>
+
+<!-- ===== Navbar ===== -->
+<header class="navbar">
+  <div class="container">
+    <a href="/" class="brand"><span class="mark">PE</span><span class="brand-text"> Prime Elite Ventures</span></a>
+
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li class="nav-item-dropdown" id="servicesDropdown">
+        <button aria-haspopup="true" aria-expanded="false">Services <i class="fa-solid fa-chevron-down" style="font-size:.7em"></i></button>
+        <div class="dropdown-menu" id="servicesMenu">
+          <a href="#services">All services</a>
+          <a href="/services/strategy">Strategy &amp; Advisory</a>
+          <a href="/services/finance">Financial Structuring</a>
+          <a href="/services/ops">Operations Optimisation</a>
+          <a href="/services/digital">Digital Transformation</a>
+          <a href="/services/risk">Risk &amp; Compliance</a>
+          <a href="/services/hr">People &amp; Talent</a>
+        </div>
+      </li>
+      <li class="nav-item-dropdown" id="moreDropdown">
+        <button aria-haspopup="true" aria-expanded="false">Menu <i class="fa-solid fa-chevron-down" style="font-size:.7em"></i></button>
+        <div class="dropdown-menu" id="moreMenu">
+          <a href="#team">Team</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#projects">Projects</a>
+          <a href="#careers">Careers</a>
+          <a href="#resources">Resources</a>
+          <a href="#partners">Partners</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <select class="lang-select" id="langSelect" aria-label="Select language">
+        <option value="en">EN</option>
+        <option value="es">ES</option>
+        <option value="fr">FR</option>
+        <option value="sw">SW</option>
+      </select>
+
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <i class="fa-solid fa-sun icon-sun"></i>
+        <i class="fa-solid fa-moon icon-moon"></i>
+      </button>
+
+      <div id="notifBellContainer"></div>
+
+      <div class="auth-widget" id="authWidget">
+        <button class="btn btn-ghost btn-sm login-btn" id="loginTrigger">
+          <i class="fa-solid fa-user"></i> <span id="authLabel">Log in</span>
+        </button>
+        <div class="user-menu" id="userMenu">
+          <a href="/dashboard">My Portal</a>
+          <button id="logoutBtn">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="hero-media"><div class="ledger-lines"></div></div>
+  <div class="container">
+    <div>
+      <span class="eyebrow" data-reveal>Advisory · Nairobi &amp; East Africa</span>
+      <h1 class="hero-headline" id="heroHeadline"></h1>
+      <p class="hero-sub" id="heroSub" data-reveal></p>
+      <div class="hero-cta-row" data-reveal>
+        <a href="#contact" class="btn btn-primary">Get Started Today</a>
+        <a href="#services" class="btn btn-ghost">View Our Services</a>
+      </div>
+      <div class="hero-stats" id="heroStats">
+        <div class="glass-card stat-card"><span class="stat-value skeleton" style="min-height:1.5em"></span><span class="stat-label">Success Rate</span></div>
+        <div class="glass-card stat-card"><span class="stat-value skeleton" style="min-height:1.5em"></span><span class="stat-label">Clients Served</span></div>
+        <div class="glass-card stat-card"><span class="stat-value skeleton" style="min-height:1.5em"></span><span class="stat-label">Support</span></div>
+        <div class="glass-card stat-card"><span class="stat-value skeleton" style="min-height:1.5em"></span><span class="stat-label">Certified</span></div>
+      </div>
+    </div>
+    <div class="hero-visual" id="heroVisual">
+      <div class="slide active" style="background:linear-gradient(135deg,#1b2740,#0b1220)"></div>
+      <div class="slide" style="background:linear-gradient(135deg,#2a3a5c,#121b2e)"></div>
+      <div class="slide" style="background:linear-gradient(135deg,#a06f2c,#0b1220)"></div>
+      <p class="ledger-caption" id="ledgerCaption">Loading the latest from Prime Elite Ventures…</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== About / Core Values ===== -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-copy" data-reveal>
+        <span class="eyebrow" id="aboutEyebrow">About Prime Elite Ventures</span>
+        <h2 id="aboutHeadline"></h2>
+        <p id="aboutParagraph1"></p>
+        <p id="aboutParagraph2"></p>
+        <div class="about-stats">
+          <div><span class="figure" id="aboutStat1Value"></span><span class="figure-label" id="aboutStat1Label"></span></div>
+          <div><span class="figure" id="aboutStat2Value"></span><span class="figure-label" id="aboutStat2Label"></span></div>
+        </div>
+      </div>
+      <div class="grid grid-2" data-reveal id="coreValuesGrid">
+        <div class="glass-card value-card skeleton" style="min-height:140px"></div>
+        <div class="glass-card value-card skeleton" style="min-height:140px"></div>
+        <div class="glass-card value-card skeleton" style="min-height:140px"></div>
+        <div class="glass-card value-card skeleton" style="min-height:140px"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Services ===== -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">What we do</span>
+      <h2>Six practices, one accountable team</h2>
+      <p>Every engagement draws on the practice — or combination of practices — your quarter actually needs.</p>
+    </div>
+    <div class="grid grid-3" id="servicesGrid">
+      <div class="glass-card skeleton"></div>
+      <div class="glass-card skeleton"></div>
+      <div class="glass-card skeleton"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Projects ===== -->
+<section class="section" id="projects">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Packaged engagements</span>
+      <h2>Projects you can apply for directly</h2>
+      <p>Scoped, outcome-based engagements with a defined timeline — apply and we'll follow up with fit and pricing.</p>
+    </div>
+    <div class="grid grid-3" id="projectsGrid">
+      <div class="glass-card skeleton"></div>
+      <div class="glass-card skeleton"></div>
+      <div class="glass-card skeleton"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Gallery ===== -->
+<section class="section" id="gallery">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Field notes</span>
+      <h2>Inside the engagements</h2>
+    </div>
+    <div class="gallery-filters" id="galleryFilters" role="tablist" aria-label="Filter gallery">
+      <button class="filter-btn active" data-filter="All">All</button>
+      <button class="filter-btn" data-filter="Projects">Projects</button>
+      <button class="filter-btn" data-filter="Team">Team</button>
+      <button class="filter-btn" data-filter="Events">Events</button>
+      <button class="filter-btn" data-filter="Office">Office</button>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="gallery-item skeleton"></div>
+      <div class="gallery-item skeleton"></div>
+      <div class="gallery-item skeleton"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+  <div class="lightbox-frame" id="lightboxFrame">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="lightbox-nav next" id="lightboxNext" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
+    <span id="lightboxCaption"></span>
+  </div>
+</div>
+
+<!-- ===== Team ===== -->
+<section class="section" id="team">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">People</span>
+      <h2>The team behind the numbers</h2>
+    </div>
+    <div class="grid grid-4" id="teamGrid">
+      <div class="glass-card skeleton"></div>
+      <div class="glass-card skeleton"></div>
+      <div class="glass-card skeleton"></div>
+      <div class="glass-card skeleton"></div>
+    </div>
+
+    <h3 style="margin-top:3.5rem">Board of Directors</h3>
+    <div class="grid grid-4" id="directorsGrid">
+      <div class="glass-card skeleton"></div>
+      <div class="glass-card skeleton"></div>
+    </div>
+
+    <div class="team-stats-panel" id="teamStatsPanel">
+      <div><span class="figure" style="font-family:var(--font-display);font-size:var(--step-2);color:var(--accent)">38</span><div class="figure-label" style="color:var(--text-muted);font-size:var(--step--1)">Consultants</div></div>
+      <div><span class="figure" style="font-family:var(--font-display);font-size:var(--step-2);color:var(--accent)">6</span><div class="figure-label" style="color:var(--text-muted);font-size:var(--step--1)">Practice areas</div></div>
+      <div><span class="figure" style="font-family:var(--font-display);font-size:var(--step-2);color:var(--accent)">4</span><div class="figure-label" style="color:var(--text-muted);font-size:var(--step--1)">Countries served</div></div>
+      <div><span class="figure" style="font-family:var(--font-display);font-size:var(--step-2);color:var(--accent)">97%</span><div class="figure-label" style="color:var(--text-muted);font-size:var(--step--1)">Client retention</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Careers ===== -->
+<section class="section" id="careers">
+  <div class="container">
+    <div class="careers-layout">
+      <div data-reveal>
+        <span class="eyebrow">Careers</span>
+        <h2>Why choose us?</h2>
+        <ul class="why-list">
+          <li><i class="fa-solid fa-check"></i> Case teams of three, not fourteen — you'll own real client relationships from month one.</li>
+          <li><i class="fa-solid fa-check"></i> A written development plan reviewed every quarter, not once a year.</li>
+          <li><i class="fa-solid fa-check"></i> Sector rotations across fintech, retail, and public-sector work.</li>
+          <li><i class="fa-solid fa-check"></i> Profit-share on repeat client engagements you help win.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="grid" id="careersGrid" style="gap:1rem">
+          <div class="glass-card skeleton" style="min-height:80px"></div>
+          <div class="glass-card skeleton" style="min-height:80px"></div>
+          <div class="glass-card skeleton" style="min-height:80px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Resources ===== -->
+<section class="section" id="resources">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Resources</span>
+      <h2>Guides, checklists &amp; templates</h2>
+      <p>A few of the working documents our own consultants use — free to download.</p>
+    </div>
+    <div class="grid grid-3" id="resourcesGrid">
+      <div class="glass-card skeleton"></div>
+      <div class="glass-card skeleton"></div>
+      <div class="glass-card skeleton"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Partners ===== -->
+<section class="section" id="partners">
+  <div class="container">
+    <div class="about-grid">
+      <div data-reveal>
+        <span class="eyebrow">Partner with us</span>
+        <h2>Become a Prime Elite Ventures partner</h2>
+        <p>We work with referral partners, technology vendors, and co-delivery firms across East Africa. If you see a fit, tell us about it below.</p>
+        <ul class="why-list">
+          <li><i class="fa-solid fa-check"></i> Referral partnerships with a transparent fee structure</li>
+          <li><i class="fa-solid fa-check"></i> Technology and tooling partnerships for joint delivery</li>
+          <li><i class="fa-solid fa-check"></i> Co-delivery arrangements with complementary advisory firms</li>
+        </ul>
+      </div>
+      <form class="glass-card" id="partnerForm" novalidate>
+        <div class="form-row">
+          <label for="pf-name">Full name</label>
+          <input type="text" id="pf-name" name="name" required>
+        </div>
+        <div class="form-row">
+          <label for="pf-email">Email address</label>
+          <input type="email" id="pf-email" name="email" required>
+        </div>
+        <div class="form-row">
+          <label for="pf-org">Organisation (optional)</label>
+          <input type="text" id="pf-org" name="organization">
+        </div>
+        <div class="form-row">
+          <label for="pf-type">Partnership type</label>
+          <select id="pf-type" name="partnershipType">
+            <option value="Referral partner">Referral partner</option>
+            <option value="Technology partner">Technology partner</option>
+            <option value="Co-delivery partner">Co-delivery partner</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="pf-message">Tell us about the partnership</label>
+          <textarea id="pf-message" name="message" required placeholder="What are you proposing, and why is it a fit?"></textarea>
+          <span class="field-error" id="err-pf-message"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" id="partnerSubmit" style="width:100%; justify-content:center">Submit application</button>
+        <div class="form-status" id="partnerStatus"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Contact ===== -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div data-reveal>
+        <span class="eyebrow">Get in touch</span>
+        <h2>Get Started Today</h2>
+        <p>Tell us where the business is today and where it needs to be by year end. We'll reply within one business day with next steps.</p>
+        <ul class="contact-info-list">
+          <li><i class="fa-solid fa-location-dot"></i> Britam Tower, Level 8, Upper Hill, Nairobi</li>
+          <li><i class="fa-solid fa-phone"></i> +254 700 000 000</li>
+          <li><i class="fa-solid fa-envelope"></i> hello@primeeliteventures.example</li>
+        </ul>
+      </div>
+      <form class="glass-card" id="contactForm" novalidate>
+        <div class="form-row">
+          <label for="cf-name">Full name</label>
+          <input type="text" id="cf-name" name="name" autocomplete="name" required>
+          <span class="field-error" id="err-name">Please enter your name.</span>
+        </div>
+        <div class="form-row">
+          <label for="cf-email">Email address</label>
+          <input type="email" id="cf-email" name="email" autocomplete="email" required>
+          <span class="field-error" id="err-email">Please enter a valid email.</span>
+        </div>
+        <div class="form-row">
+          <label for="cf-phone">Phone (optional)</label>
+          <input type="tel" id="cf-phone" name="phone" autocomplete="tel">
+        </div>
+        <div class="form-row">
+          <label for="cf-message">How can we help?</label>
+          <textarea id="cf-message" name="message" required></textarea>
+          <span class="field-error" id="err-message">Please add a short message.</span>
+        </div>
+        <button type="submit" class="btn btn-primary" id="contactSubmit" style="width:100%; justify-content:center">Send message</button>
+        <div class="form-status" id="contactStatus"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="site-footer section" style="border-bottom:none">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-col">
+        <a href="/" class="brand" style="margin-bottom:1rem; display:inline-flex"><span class="mark">PE</span><span class="brand-text"> Prime Elite Ventures</span></a>
+        <p id="footerTagline">Strategy, finance, and operations advisory for ambitious East African businesses.</p>
+        <div class="social-row">
+          <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul><li><a href="#about">About</a></li><li><a href="#team">Team</a></li><li><a href="#careers">Careers</a></li><li><a href="#resources">Resources</a></li><li><a href="#partners">Partners</a></li><li><a href="#contact">Contact</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul><li><a href="#services">Strategy &amp; Advisory</a></li><li><a href="#services">Financial Structuring</a></li><li><a href="#services">Operations</a></li><li><a href="#services">Digital Transformation</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <ul><li><a href="/login">Client Portal</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Prime Elite Ventures. All rights reserved.</span>
+      <span>Britam Tower, Upper Hill, Nairobi, Kenya</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/theme-manager.js"></script>
+<script src="/js/mobile-menu-toggle.js"></script>
+<script src="/js/performance-loader.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/notifications-widget.js"></script>
+<script src="/js/auth-widget.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

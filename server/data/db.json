@@ -1,0 +1,403 @@
+{
+  "users": [
+    {
+      "id": "user-seed-admin",
+      "name": "Amina Ouma",
+      "email": "admin@primeeliteventures.example",
+      "passwordHash": "$2a$10$MZLOrQVBA17HuUOt7g48nOzpERciKrfJmNyGxQOYAkEf5VNR2YFe6",
+      "role": "admin",
+      "companyName": null,
+      "title": "Managing Partner",
+      "category": "CEO",
+      "permissions": [
+        "requests",
+        "applications",
+        "content",
+        "staff",
+        "users",
+        "messages",
+        "email_requests",
+        "reports",
+        "partners",
+        "invoices",
+        "bookings"
+      ],
+      "bio": "18 years across private equity and public-sector advisory.",
+      "photoUrl": "/uploads/images/1789299867916-971825.jpg",
+      "featured": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "user-seed-staff-1",
+      "name": "David Kariuki",
+      "email": "d.kariuki@primeeliteventures.example",
+      "passwordHash": "$2a$10$OiLEvgRQWyG56cd1BksRj.qy.y/CAEuzoGi74pv2/SvNA4kHsM82O",
+      "role": "admin",
+      "companyName": null,
+      "title": "Head of Strategy",
+      "category": "Director",
+      "permissions": [
+        "requests",
+        "applications",
+        "content",
+        "reports",
+        "partners"
+      ],
+      "bio": "Ex-McKinsey; leads market-entry and growth engagements.",
+      "photoUrl": null,
+      "featured": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "user-seed-staff-2",
+      "name": "Faith Nyambura",
+      "email": "f.nyambura@primeeliteventures.example",
+      "passwordHash": "$2a$10$cEycSix1PZkgwFYiBWhggu/rWiWl47trixFtKmGNTJh5qw3fZHV4m",
+      "role": "admin",
+      "companyName": null,
+      "title": "Director of Finance",
+      "category": "Accountant",
+      "permissions": [
+        "reports",
+        "invoices",
+        "bookings"
+      ],
+      "bio": "Chartered accountant specialising in capital structuring.",
+      "photoUrl": "/uploads/images/1789299799172-61159.jpg",
+      "featured": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "user-seed-staff-3",
+      "name": "Samuel Otieno",
+      "email": "s.otieno@primeeliteventures.example",
+      "passwordHash": "$2a$10$rxR.M9D8zexVFo6Y1BFY6utgqcZziPevCnH7pjwdUlJvIAOPxM8Vu",
+      "role": "admin",
+      "companyName": null,
+      "title": "Head of Technology",
+      "category": "Director",
+      "permissions": [
+        "requests",
+        "applications",
+        "content",
+        "reports",
+        "partners"
+      ],
+      "bio": "Builds the digital backbone behind every transformation project.",
+      "photoUrl": null,
+      "featured": true,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "user-seed-hr",
+      "name": "Grace Kamau",
+      "email": "hr@primeeliteventures.example",
+      "passwordHash": "$2a$10$OiLEvgRQWyG56cd1BksRj.qy.y/CAEuzoGi74pv2/SvNA4kHsM82O",
+      "role": "admin",
+      "companyName": null,
+      "title": "HR Manager",
+      "category": "HR",
+      "permissions": [
+        "staff",
+        "applications",
+        "users",
+        "reports"
+      ],
+      "bio": "Runs recruitment, onboarding, and staff records.",
+      "photoUrl": "/uploads/images/1789299832979-115910.jpg",
+      "featured": false,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "user-seed-client",
+      "name": "Wanjiku Njeri",
+      "email": "client@primeeliteventures.example",
+      "passwordHash": "$2a$10$bxO80NJLB86pYPdT9jEx8OKm/TzN9IQ6Zwlm0zVNZUdlsqDzqph9q",
+      "role": "client",
+      "companyName": null,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "user-seed-company",
+      "name": "James Otieno",
+      "email": "company@primeeliteventures.example",
+      "passwordHash": "$2a$10$lrC/RT3hDuyQUzEIxP7QXuXlLxLi1pVKT42dchOUGacOEDODuG8zC",
+      "role": "company",
+      "companyName": "Acme Retail Ltd",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "serviceRequests": [],
+  "services": [
+    {
+      "id": "svc-strategy",
+      "title": "Strategy & Advisory",
+      "icon": "fa-solid fa-chess-knight",
+      "summary": "Board-level strategy, market entry planning, and growth roadmaps built on your numbers, not templates.",
+      "category": "Advisory"
+    },
+    {
+      "id": "svc-finance",
+      "title": "Financial Structuring",
+      "icon": "fa-solid fa-chart-line",
+      "summary": "Capital raises, financial modelling, and investor-ready reporting for scaling ventures.",
+      "category": "Finance"
+    },
+    {
+      "id": "svc-ops",
+      "title": "Operations Optimisation",
+      "icon": "fa-solid fa-gears",
+      "summary": "Process redesign and systems audits that cut waste and shorten your delivery cycle.",
+      "category": "Operations"
+    },
+    {
+      "id": "svc-digital",
+      "title": "Digital Transformation",
+      "icon": "fa-solid fa-display",
+      "summary": "Technology roadmaps, tooling audits, and change management for teams modernising in place.",
+      "category": "Technology"
+    },
+    {
+      "id": "svc-risk",
+      "title": "Risk & Compliance",
+      "icon": "fa-solid fa-shield-halved",
+      "summary": "Regulatory mapping and risk frameworks that keep pace with your jurisdiction and sector.",
+      "category": "Compliance"
+    },
+    {
+      "id": "svc-hr",
+      "title": "People & Talent",
+      "icon": "fa-solid fa-people-group",
+      "summary": "Org design, leadership coaching, and hiring pipelines built for the team you're becoming.",
+      "category": "People"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1",
+      "title": "Retail POS Modernisation",
+      "icon": "fa-solid fa-cash-register",
+      "summary": "A packaged engagement to replace legacy point-of-sale systems across a multi-branch retail footprint.",
+      "category": "Digital Transformation"
+    },
+    {
+      "id": "proj-2",
+      "title": "Series A Readiness Sprint",
+      "icon": "fa-solid fa-rocket",
+      "summary": "An 8-week sprint to get financial models, data rooms, and governance investor-ready.",
+      "category": "Finance"
+    },
+    {
+      "id": "proj-3",
+      "title": "Supply Chain Resilience Audit",
+      "icon": "fa-solid fa-truck-fast",
+      "summary": "End-to-end supplier risk mapping and contingency planning for manufacturing and retail operations.",
+      "category": "Operations"
+    }
+  ],
+  "directors": [
+    {
+      "id": "d1",
+      "name": "Grace Wanjiru",
+      "role": "Board Chair",
+      "photoUrl": "/uploads/images/1789299962035-290637.jpg"
+    },
+    {
+      "id": "d2",
+      "name": "Peter Mwangi",
+      "role": "Non-Executive Director",
+      "photoUrl": "/uploads/images/1789299984568-48622.JPG"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "g1",
+      "category": "Projects",
+      "title": "Nairobi Fintech Rollout",
+      "photoUrl": null
+    },
+    {
+      "id": "g2",
+      "category": "Team",
+      "title": "Quarterly Strategy Offsite",
+      "photoUrl": null
+    },
+    {
+      "id": "g3",
+      "category": "Events",
+      "title": "Prime Elite Summit 2025",
+      "photoUrl": null
+    },
+    {
+      "id": "g4",
+      "category": "Office",
+      "title": "Nairobi HQ, Level 8",
+      "photoUrl": null
+    },
+    {
+      "id": "g5",
+      "category": "Projects",
+      "title": "Retail Supply Chain Audit",
+      "photoUrl": null
+    },
+    {
+      "id": "g6",
+      "category": "Events",
+      "title": "Client Appreciation Evening",
+      "photoUrl": null
+    }
+  ],
+  "careers": [
+    {
+      "id": "c1",
+      "title": "Senior Strategy Consultant",
+      "location": "Nairobi, KE",
+      "type": "Full-time",
+      "keywords": [
+        "strategy",
+        "market entry",
+        "advisory",
+        "growth",
+        "consulting"
+      ]
+    },
+    {
+      "id": "c2",
+      "title": "Financial Analyst",
+      "location": "Nairobi, KE",
+      "type": "Full-time",
+      "keywords": [
+        "financial modelling",
+        "excel",
+        "valuation",
+        "finance",
+        "accounting"
+      ]
+    },
+    {
+      "id": "c3",
+      "title": "Frontend Engineer",
+      "location": "Remote",
+      "type": "Contract",
+      "keywords": [
+        "react",
+        "javascript",
+        "css",
+        "html",
+        "frontend"
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "res-1",
+      "title": "2026 East Africa Market Entry Guide",
+      "description": "A practical framework for evaluating market entry timing, structure, and regulatory sequencing across Kenya, Uganda, and Tanzania.",
+      "category": "Guide",
+      "fileUrl": null,
+      "linkUrl": null
+    },
+    {
+      "id": "res-2",
+      "title": "Financial Modelling Checklist",
+      "description": "The same checklist our analysts use before any investor-ready model goes out the door.",
+      "category": "Checklist",
+      "fileUrl": null,
+      "linkUrl": null
+    },
+    {
+      "id": "res-3",
+      "title": "Operations Audit Template",
+      "description": "A starting template for a first-pass operations and process audit.",
+      "category": "Template",
+      "fileUrl": null,
+      "linkUrl": null
+    }
+  ],
+  "applications": [],
+  "emailRequests": [],
+  "partnerApplications": [],
+  "bookings": [],
+  "invoices": [],
+  "notifications": [],
+  "settings": {
+    "address": "Britam Tower, Level 8, Upper Hill, Nairobi",
+    "phone": "+254 700 999 888",
+    "email": "hello@primeeliteventures.example",
+    "linkedin": "#",
+    "twitter": "#",
+    "instagram": "#"
+  },
+  "stats": {
+    "successRate": "97%",
+    "clientsServed": "240+",
+    "support": "24/7",
+    "certified": "ISO 9001",
+    "auto": {
+      "clientsServed": true,
+      "successRate": false
+    }
+  },
+  "siteCopy": {
+    "heroHeadlines": [
+      {
+        "text": "Transform Your Business with Data-Driven Solutions",
+        "accentWord": "Data-Driven"
+      },
+      {
+        "text": "Strategy That Survives Contact with the Balance Sheet",
+        "accentWord": "Balance Sheet"
+      },
+      {
+        "text": "From Boardroom Plan to Quarter-End Results",
+        "accentWord": "Quarter-End Results"
+      }
+    ],
+    "heroSubtext": "We pair board-level strategy with hands-on execution — the financial modelling, operations redesign, and technology roadmaps that turn a plan into a quarter's results.",
+    "aboutEyebrow": "About Prime Elite Ventures",
+    "aboutHeadline": "Advisory built on ledgers, not slide decks.",
+    "aboutParagraph1": "Prime Elite Ventures was founded on a simple premise: strategy that can't survive contact with a balance sheet isn't strategy. We work alongside founders, boards, and operating teams to turn ambition into a plan with numbers attached — then stay through execution.",
+    "aboutParagraph2": "Across East Africa's fastest-growing sectors — fintech, retail, manufacturing, and public-sector partnerships — our engagements are measured in the same terms our clients are: revenue, retention, and time-to-value.",
+    "aboutStat1Value": "12",
+    "aboutStat1Label": "Years in practice",
+    "aboutStat2Value": "240+",
+    "aboutStat2Label": "Engagements delivered",
+    "footerTagline": "Strategy, finance, and operations advisory for ambitious East African businesses.",
+    "heroHeadline": "Transform Your Business with Data-Driven Solutions"
+  },
+  "coreValues": [
+    {
+      "id": "val-1",
+      "title": "Innovation",
+      "description": "We bring frameworks from outside your sector, then adapt them to your constraints — not the other way round."
+    },
+    {
+      "id": "val-2",
+      "title": "Integrity",
+      "description": "We tell clients what the numbers say, even when it isn't the plan they walked in with."
+    },
+    {
+      "id": "val-3",
+      "title": "Collaboration",
+      "description": "Our consultants work inside your team's tools and cadence, not from a separate deck."
+    },
+    {
+      "id": "val-4",
+      "title": "Excellence",
+      "description": "Every engagement closes with a written playbook your team owns after we leave."
+    }
+  ],
+  "contactMessages": [],
+  "announcements": [
+    {
+      "id": "ann-seed-1",
+      "text": "Shortlisted as a finalist for the 2026 East Africa Advisory Firm of the Year award.",
+      "createdAt": "2026-08-01T00:00:00.000Z"
+    },
+    {
+      "id": "ann-seed-2",
+      "text": "Opened a new client engagement desk in Mombasa to support coastal-region expansions.",
+      "createdAt": "2026-07-15T00:00:00.000Z"
+    }
+  ]
+}

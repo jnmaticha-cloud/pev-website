@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create account — Prime Elite Ventures</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0b1220">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/img/favicon.ico">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="/css/modern-design-system.css">
+<link rel="stylesheet" href="/css/navbar.css">
+<link rel="stylesheet" href="/css/dark-mode.css">
+<link rel="stylesheet" href="/css/premium-design.css">
+</head>
+<body>
+<header class="navbar">
+  <div class="container">
+    <a href="/" class="brand"><span class="mark">PE</span><span class="brand-text"> Prime Elite Ventures</span></a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <i class="fa-solid fa-sun icon-sun"></i>
+      <i class="fa-solid fa-moon icon-moon"></i>
+    </button>
+  </div>
+</header>
+
+<main class="auth-page">
+  <div class="glass-card auth-card">
+    <span class="eyebrow">Client &amp; company portal</span>
+    <h1>Create your account</h1>
+    <p>Choose the account type that matches you.</p>
+
+    <div class="form-row" role="tablist" aria-label="Account type" style="display:flex; gap:.6rem; margin-bottom:.5rem">
+      <button type="button" class="filter-btn active" id="tabClient" style="flex:1">Individual client</button>
+      <button type="button" class="filter-btn" id="tabCompany" style="flex:1">Company</button>
+    </div>
+    <p id="companyApprovalNote" style="display:none; font-size:var(--step--1); color:var(--text-muted); margin-bottom:1.25rem">
+      <i class="fa-solid fa-circle-info"></i> Company accounts are reviewed by our team before you can log in — usually within one business day.
+    </p>
+
+    <form id="registerForm" novalidate>
+      <input type="hidden" id="role" value="client">
+
+      <div class="form-row">
+        <label for="name" id="nameLabel">Full name</label>
+        <input type="text" id="name" name="name" autocomplete="name" required>
+      </div>
+
+      <div class="form-row" id="companyNameRow" style="display:none">
+        <label for="companyName">Company name</label>
+        <input type="text" id="companyName" name="companyName" autocomplete="organization">
+        <span class="field-error" id="err-companyName"></span>
+      </div>
+
+      <div class="form-row" id="contactTitleRow" style="display:none">
+        <label for="contactTitle">Your role at the company</label>
+        <select id="contactTitle" name="contactTitle">
+          <option value="">Select a role…</option>
+          <option value="CEO">CEO</option>
+          <option value="COO">COO</option>
+          <option value="CFO">CFO</option>
+          <option value="Director">Director</option>
+          <option value="Accountant">Accountant</option>
+          <option value="HR">HR</option>
+          <option value="Staff">Staff</option>
+        </select>
+        <span class="field-error" id="err-contactTitle"></span>
+      </div>
+
+      <div class="form-row">
+        <label for="email">Work email</label>
+        <input type="email" id="email" name="email" autocomplete="email" required>
+      </div>
+      <div class="form-row">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="new-password" minlength="8" required>
+        <span style="font-size:var(--step--1); color:var(--text-muted)">At least 8 characters.</span>
+      </div>
+      <button type="submit" class="btn btn-primary" id="registerSubmit" style="width:100%; justify-content:center">Create account</button>
+      <div class="form-status" id="registerStatus"></div>
+    </form>
+
+    <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
+  </div>
+</main>
+
+<script src="/js/theme-manager.js"></script>
+<script src="/js/api.js"></script>
+<script>
+  const tabClient = document.getElementById('tabClient');
+  const tabCompany = document.getElementById('tabCompany');
+  const roleInput = document.getElementById('role');
+  const companyNameRow = document.getElementById('companyNameRow');
+  const companyNameInput = document.getElementById('companyName');
+  const contactTitleRow = document.getElementById('contactTitleRow');
+  const contactTitleInput = document.getElementById('contactTitle');
+  const nameLabel = document.getElementById('nameLabel');
+
+  function setRole(role) {
+    roleInput.value = role;
+    const isCompany = role === 'company';
+    tabClient.classList.toggle('active', !isCompany);
+    tabCompany.classList.toggle('active', isCompany);
+    companyNameRow.style.display = isCompany ? 'grid' : 'none';
+    companyNameInput.required = isCompany;
+    contactTitleRow.style.display = isCompany ? 'grid' : 'none';
+    contactTitleInput.required = isCompany;
+    document.getElementById('companyApprovalNote').style.display = isCompany ? 'block' : 'none';
+    nameLabel.textContent = isCompany ? 'Primary contact name' : 'Full name';
+  }
+  tabClient.addEventListener('click', () => setRole('client'));
+  tabCompany.addEventListener('click', () => setRole('company'));
+
+  document.getElementById('registerForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const status = document.getElementById('registerStatus');
+    const btn = document.getElementById('registerSubmit');
+    status.className = 'form-status';
+    btn.disabled = true;
+    btn.textContent = 'Creating account…';
+    try {
+      const result = await window.PEVApi.register({
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value,
+        role: roleInput.value,
+        companyName: companyNameInput.value.trim(),
+        contactTitle: contactTitleInput.value,
+      });
+      if (result.pending) {
+        status.textContent = result.message;
+        status.className = 'form-status success show';
+        btn.textContent = 'Submitted for review';
+        document.getElementById('registerForm').reset();
+        return;
+      }
+      window.location.href = window.PEVApi.portalPathForRole(result.user.role);
+    } catch (err) {
+      let msg = err.message || 'Registration failed.';
+      if (err.fields) msg = Object.values(err.fields).join(' ');
+      status.textContent = msg;
+      status.className = 'form-status error show';
+      btn.disabled = false;
+      btn.textContent = 'Create account';
+    }
+  });
+</script>
+</body>
+</html>
