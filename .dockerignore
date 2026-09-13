@@ -1,8 +1,6 @@
-﻿node_modules
+node_modules
 npm-debug.log
 .git
 .gitignore
 .env
 .env.local
-public/uploads/images/*
-!public/uploads/images/.gitkeep
