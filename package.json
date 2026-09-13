@@ -2,10 +2,10 @@
   "name": "prime-elite-ventures",
   "version": "1.0.0",
   "description": "Prime Elite Ventures corporate website - full stack",
-  "main": "server/index.js",
+  "main": "index.js",
   "scripts": {
     "build": "echo 'Build complete'",
-    "start": "node server/index.js",
+    "start": "node index.js",
     "test": "node server/test.js"
   },
   "engines": {
