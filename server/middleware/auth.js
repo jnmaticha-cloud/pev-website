@@ -1,8 +1,17 @@
 const jwt = require('jsonwebtoken');
 const { readDb } = require('../data/store');
 
+const crypto = require('crypto');
 const DEV_JWT_SECRET = 'dev-secret-change-in-production';
-const JWT_SECRET = process.env.JWT_SECRET || DEV_JWT_SECRET;
+let JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET || JWT_SECRET === DEV_JWT_SECRET) {
+  if (process.env.NODE_ENV === 'production') {
+    console.warn('[WARN] JWT_SECRET unset in production. Using an auto-generated random secret for this instance.');
+    JWT_SECRET = crypto.randomBytes(32).toString('hex');
+  } else {
+    JWT_SECRET = DEV_JWT_SECRET;
+  }
+}
 
 function signToken(user) {
   return jwt.sign(

@@ -4,6 +4,7 @@
   "description": "Prime Elite Ventures corporate website - full stack",
   "main": "server/index.js",
   "scripts": {
+    "build": "echo 'Build complete'",
     "start": "node server/index.js",
     "test": "node server/test.js"
   },
