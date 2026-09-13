@@ -1,7 +1,6 @@
 (function () {
   document.addEventListener('DOMContentLoaded', function () {
     initHeroHeadline();
-    initHeroSlider();
     initAtAGlance();
     initScrollReveal();
     initStats();
@@ -46,7 +45,7 @@
         const span = document.createElement('span');
         span.className = 'word' + (isAccent ? ' accent-word' : '');
         if (animate) {
-          span.style.animationDelay = (i * 90) + 'ms';
+          span.style.animationDelay = (i * 120) + 'ms';
         } else {
           // No animation on rotation — but the base CSS rule for .word
           // starts at opacity:0 (so the *first* render can animate in via
@@ -57,7 +56,12 @@
           span.style.opacity = '1';
           span.style.transform = 'none';
         }
-        span.textContent = word + ' ';
+        // Spacing comes from CSS (margin-right on .word), not a trailing
+        // space character — a literal trailing space inside an
+        // inline-block can get silently trimmed by the browser at
+        // certain line-wrap points, which is what made words look
+        // crowded together.
+        span.textContent = word;
         el.appendChild(span);
       });
     }
@@ -118,32 +122,48 @@
     }
   }
 
-  function initHeroSlider() {
-    const visual = document.getElementById('heroVisual');
-    if (!visual) return;
-    const slides = visual.querySelectorAll('.slide');
-    let idx = 0;
-    if (slides.length < 2) return;
-    setInterval(function () {
-      slides[idx].classList.remove('active');
-      idx = (idx + 1) % slides.length;
-      slides[idx].classList.add('active');
-    }, 4500);
-  }
+  /* ---------- "PEV at a glance" — a single synced rotation driving both
+     the hero visual panel and its caption: open roles, active projects,
+     recent announcements, and (if configured) live external business-news
+     headlines. Each item shows a real gallery photo when one exists for
+     its category; otherwise a themed gradient fallback (so this looks
+     right today with an empty gallery, and automatically starts showing
+     real photos the moment any are uploaded in Admin -> Gallery). ---------- */
+  const GLANCE_FALLBACKS = {
+    career: 'linear-gradient(135deg,#2a3a5c,#121b2e)',
+    project: 'linear-gradient(135deg,#1b2740,#0b1220)',
+    announcement: 'linear-gradient(135deg,#a06f2c,#0b1220)',
+    news: 'linear-gradient(135deg,#3a2a5c,#0b1220)',
+  };
+  const GLANCE_GALLERY_CATEGORY = {
+    career: 'Team',
+    project: 'Projects',
+    announcement: 'Events',
+    news: 'Events',
+  };
 
-  /* ---------- "PEV at a glance" — rotating caption under the hero
-     visual: open roles, active projects, recent announcements, and
-     (if configured) live external business-news headlines. ---------- */
   async function initAtAGlance() {
     const caption = document.getElementById('ledgerCaption');
+    const slideBg = document.getElementById('heroSlideBg');
     if (!caption) return;
 
     const items = [];
+    let galleryByCategory = {};
+    try {
+      const gallery = await window.PEVApi.getGallery();
+      gallery.forEach((g) => {
+        if (g.photoUrl && !galleryByCategory[g.category]) galleryByCategory[g.category] = g.photoUrl;
+      });
+    } catch (e) {
+      // Gallery is optional context here — a missing photo just means we
+      // fall back to a themed gradient, so a failed fetch isn't fatal.
+    }
+
     try {
       const glance = await fetch('/api/at-a-glance').then((r) => r.json());
-      glance.openRoles.forEach((title) => items.push(`Now hiring — ${title}`));
-      glance.activeProjects.forEach((title) => items.push(`Active engagement — ${title}`));
-      glance.announcements.forEach((text) => items.push(text));
+      glance.openRoles.forEach((title) => items.push({ text: `Now hiring — ${title}`, kind: 'career' }));
+      glance.activeProjects.forEach((title) => items.push({ text: `Active engagement — ${title}`, kind: 'project' }));
+      glance.announcements.forEach((text) => items.push({ text, kind: 'announcement' }));
     } catch (e) {
       console.error('Failed to load "at a glance" data', e);
     }
@@ -151,7 +171,7 @@
     try {
       const news = await fetch('/api/news/external').then((r) => r.json());
       if (news.configured) {
-        news.articles.forEach((a) => items.push(`In the news — ${a.title}${a.source ? ` (${a.source})` : ''}`));
+        news.articles.forEach((a) => items.push({ text: `In the news — ${a.title}${a.source ? ` (${a.source})` : ''}`, kind: 'news' }));
       }
     } catch (e) {
       // External news is optional — fail silently.
@@ -164,17 +184,25 @@
 
     let idx = 0;
     function show() {
+      const item = items[idx];
+      const photo = galleryByCategory[GLANCE_GALLERY_CATEGORY[item.kind]];
       caption.style.transition = 'opacity 400ms ease';
       caption.style.opacity = '0';
+      if (slideBg) slideBg.style.opacity = '0';
       setTimeout(() => {
-        caption.textContent = items[idx];
+        caption.textContent = item.text;
         caption.style.opacity = '1';
+        if (slideBg) {
+          slideBg.style.background = photo ? `center / cover no-repeat url("${photo}")` : GLANCE_FALLBACKS[item.kind];
+          slideBg.style.opacity = '1';
+        }
         idx = (idx + 1) % items.length;
       }, 400);
     }
     show();
     if (items.length > 1) setInterval(show, 5000);
   }
+
 
   /* ---------- Scroll reveal ---------- */
   function initScrollReveal() {
@@ -301,13 +329,50 @@
     try {
       const services = await window.PEVApi.getServices();
       grid.innerHTML = '';
-      services.forEach((svc) => grid.appendChild(renderApplyCard(svc, 'service')));
+      services.forEach((svc) => {
+        const card = renderApplyCard(svc, 'service');
+        card.id = 'service-' + svc.id.replace(/^svc-/, '');
+        grid.appendChild(card);
+      });
       initScrollReveal();
+      scrollToHashTarget();
     } catch (e) {
       grid.innerHTML = '<p>Services are temporarily unavailable. Please try again shortly.</p>';
       console.error('Failed to load services', e);
     }
   }
+
+  // Services are rendered async, so a plain #service-finance link in the
+  // URL loads before the target element exists — the browser's native
+  // anchor jump has nothing to scroll to yet. This re-does that jump once
+  // the card is actually on the page, and gives it a brief highlight so
+  // it's obvious which one you clicked.
+  function scrollToHashTarget() {
+    const hash = window.location.hash;
+    if (!hash || hash.length < 2) return;
+    const target = document.querySelector(hash);
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    target.classList.add('target-highlight');
+    setTimeout(() => target.classList.remove('target-highlight'), 1800);
+  }
+
+  // Same-page dropdown clicks: scroll smoothly instead of relying on the
+  // browser's instant native jump, and re-run the highlight even if the
+  // hash string doesn't change (clicking the same service twice in a row).
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('#servicesMenu a[href^="#"]');
+    if (!link) return;
+    const target = document.querySelector(link.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    history.replaceState(null, '', link.getAttribute('href'));
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    target.classList.remove('target-highlight');
+    void target.offsetWidth; // restart the animation if it's already mid-flight
+    target.classList.add('target-highlight');
+    setTimeout(() => target.classList.remove('target-highlight'), 1800);
+  });
 
   async function initProjects() {
     const grid = document.getElementById('projectsGrid');
