@@ -32,12 +32,18 @@
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   gap: clamp(2rem, 5vw, 4rem);
-  align-items: center;
+  /* Was "center" — with the left column (long headline + stats grid)
+     taller than the fixed-aspect-ratio visual panel on the right, that
+     vertically centered the shorter panel against its taller sibling,
+     leaving an empty gap above it. Aligning both to the top instead
+     lines the visual panel up with the headline's top edge. */
+  align-items: start;
 }
 
 .hero-headline {
   font-size: var(--step-5);
   margin-bottom: 0.4em;
+  color: var(--text-primary);
 }
 .hero-headline .word {
   display: inline-block;
@@ -50,6 +56,14 @@
   to { opacity: 1; transform: translateY(0); }
 }
 .hero-headline .accent-word { color: var(--accent); font-style: italic; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-headline .word {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
 
 .hero-sub { font-size: var(--step-1); max-width: 46ch; }
 
@@ -96,14 +110,54 @@
 .hero-visual::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(7,12,20,0.1), rgba(7,12,20,0.75));
+  /* Darker at both edges, lighter in the middle — keeps the top tag and
+     bottom caption both legible without pooling all the contrast at the
+     bottom (which is what made the panel feel bottom-heavy). */
+  background: linear-gradient(
+    180deg,
+    rgba(7,12,20,0.55) 0%,
+    rgba(7,12,20,0.1) 28%,
+    rgba(7,12,20,0.12) 60%,
+    rgba(7,12,20,0.8) 100%
+  );
 }
+.hero-visual .glance-tag {
+  position: absolute; left: 1.25rem; top: 1.25rem;
+  z-index: 1;
+  display: inline-flex; align-items: center; gap: 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: rgba(7,12,20,0.45);
+  border: 1px solid rgba(212,160,84,0.35);
+  border-radius: 999px;
+  padding: 0.35em 0.8em;
+  backdrop-filter: blur(4px);
+}
+.hero-visual .glance-tag i { font-size: 0.65em; }
 .hero-visual .ledger-caption {
-  position: absolute; left: 1.25rem; bottom: 1.25rem; right: 1.25rem;
+  position: absolute; left: 1.25rem; bottom: 1.75rem; right: 1.25rem;
   z-index: 1;
   font-family: var(--font-mono);
   font-size: var(--step--1);
   color: var(--paper-50);
+  line-height: 1.5;
+}
+.hero-visual .glance-dots {
+  position: absolute; right: 1.25rem; bottom: 1.25rem;
+  z-index: 1;
+  display: flex; gap: 0.3rem;
+}
+.hero-visual .glance-dots span {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(246,243,234,0.35);
+  transition: background 300ms ease, transform 300ms ease;
+}
+.hero-visual .glance-dots span.active {
+  background: var(--accent);
+  transform: scale(1.4);
 }
 
 @media (max-width: 900px) {

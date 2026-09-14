@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 
@@ -50,6 +51,11 @@ const corsOptions = allowedOrigins.length
   ? { origin: allowedOrigins }
   : { origin: IS_PRODUCTION ? false : true };
 
+// Security headers. CSP is left off for now — this site loads Google
+// Fonts, cdnjs (Font Awesome), and the Tailwind CDN script across its
+// pages, and a default/strict CSP would silently break all of them. Turn
+// CSP on once you've listed every external host you actually use.
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: true }));

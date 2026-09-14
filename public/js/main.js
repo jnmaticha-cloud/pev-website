@@ -46,6 +46,10 @@
         span.className = 'word' + (isAccent ? ' accent-word' : '');
         if (animate) {
           span.style.animationDelay = (i * 120) + 'ms';
+          setTimeout(() => {
+            span.style.opacity = '1';
+            span.style.transform = 'none';
+          }, (i * 120) + 750);
         } else {
           // No animation on rotation — but the base CSS rule for .word
           // starts at opacity:0 (so the *first* render can animate in via
@@ -69,15 +73,67 @@
     let idx = 0;
     renderHeadline(headlines[0], true);
 
+    // Cycle through a few distinct transition styles instead of repeating
+    // the same crossfade every time, so the rotation feels less repetitive
+    // over a long page visit.
+    const TRANSITIONS = ['cascade', 'slide', 'blur'];
+    let variantIdx = 0;
+
+    function rotateTo(nextIndex) {
+      const variant = TRANSITIONS[variantIdx % TRANSITIONS.length];
+      variantIdx += 1;
+
+      if (variant === 'cascade') {
+        el.style.transition = 'opacity 300ms ease';
+        el.style.transform = 'none';
+        el.style.filter = 'none';
+        el.style.opacity = '0';
+        setTimeout(() => {
+          el.style.opacity = '1';
+          renderHeadline(headlines[nextIndex], true); // per-word cascade reveal
+        }, 300);
+        return;
+      }
+
+      if (variant === 'slide') {
+        el.style.transition = 'opacity 400ms ease, transform 400ms ease';
+        el.style.filter = 'none';
+        el.style.opacity = '0';
+        el.style.transform = 'translateX(-24px)';
+        setTimeout(() => {
+          renderHeadline(headlines[nextIndex], false);
+          el.style.transform = 'translateX(24px)';
+          // Force layout so the browser registers the jump before we
+          // transition back to translateX(0) — otherwise it just skips
+          // straight to the end state with no visible motion.
+          void el.offsetWidth;
+          el.style.transition = 'opacity 450ms ease, transform 450ms ease';
+          el.style.opacity = '1';
+          el.style.transform = 'translateX(0)';
+        }, 400);
+        return;
+      }
+
+      // 'blur' — soft focus-pull between headlines.
+      el.style.transition = 'opacity 400ms ease, filter 400ms ease, transform 400ms ease';
+      el.style.transform = 'none';
+      el.style.opacity = '0';
+      el.style.filter = 'blur(10px)';
+      setTimeout(() => {
+        renderHeadline(headlines[nextIndex], false);
+        el.style.transform = 'scale(1.03)';
+        void el.offsetWidth;
+        el.style.transition = 'opacity 550ms ease, filter 550ms ease, transform 550ms ease';
+        el.style.opacity = '1';
+        el.style.filter = 'blur(0)';
+        el.style.transform = 'scale(1)';
+      }, 400);
+    }
+
     if (headlines.length > 1) {
       setInterval(() => {
         idx = (idx + 1) % headlines.length;
-        el.style.transition = 'opacity 500ms ease';
-        el.style.opacity = '0';
-        setTimeout(() => {
-          renderHeadline(headlines[idx], false);
-          el.style.opacity = '1';
-        }, 500);
+        rotateTo(idx);
       }, 5000);
     }
   }
@@ -141,10 +197,19 @@
     announcement: 'Events',
     news: 'Events',
   };
+  const GLANCE_LABELS = {
+    career: { text: 'Careers', icon: 'fa-user-tie' },
+    project: { text: 'Active Project', icon: 'fa-diagram-project' },
+    announcement: { text: 'Announcement', icon: 'fa-bullhorn' },
+    news: { text: 'In the News', icon: 'fa-newspaper' },
+  };
 
   async function initAtAGlance() {
     const caption = document.getElementById('ledgerCaption');
     const slideBg = document.getElementById('heroSlideBg');
+    const tagLabel = document.getElementById('glanceTagLabel');
+    const tagIcon = document.querySelector('#glanceTag i');
+    const dotsWrap = document.getElementById('glanceDots');
     if (!caption) return;
 
     const items = [];
@@ -179,19 +244,29 @@
 
     if (!items.length) {
       caption.textContent = 'Strategy, capital, and operations advisory for East Africa\u2019s most ambitious businesses.';
+      if (tagLabel) tagLabel.textContent = 'At a glance';
       return;
     }
+
+    if (dotsWrap) {
+      dotsWrap.innerHTML = items.map(() => '<span></span>').join('');
+    }
+    const dots = dotsWrap ? Array.from(dotsWrap.children) : [];
 
     let idx = 0;
     function show() {
       const item = items[idx];
       const photo = galleryByCategory[GLANCE_GALLERY_CATEGORY[item.kind]];
+      const label = GLANCE_LABELS[item.kind];
       caption.style.transition = 'opacity 400ms ease';
       caption.style.opacity = '0';
       if (slideBg) slideBg.style.opacity = '0';
       setTimeout(() => {
         caption.textContent = item.text;
         caption.style.opacity = '1';
+        if (tagLabel && label) tagLabel.textContent = label.text;
+        if (tagIcon && label) tagIcon.className = 'fa-solid ' + label.icon;
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
         if (slideBg) {
           slideBg.style.background = photo ? `center / cover no-repeat url("${photo}")` : GLANCE_FALLBACKS[item.kind];
           slideBg.style.opacity = '1';

@@ -61,7 +61,7 @@ immediately:
 
 | Portal | Email | Password | Category / rights |
 |---|---|---|---|
-| Admin | `admin@primeeliteventures.example` | `AdminPass123!` | CEO — full access |
+| Admin | `josephmaticha@gmail.com` | `AdminPass123!` | CEO — full access |
 | Admin (staff) | `d.kariuki@primeeliteventures.example` | `StaffPass123!` | Director |
 | Admin (staff) | `f.nyambura@primeeliteventures.example` | `StaffPass123!` | Accountant — reports/invoices/bookings only |
 | Admin (staff) | `s.otieno@primeeliteventures.example` | `StaffPass123!` | Director |

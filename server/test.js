@@ -154,7 +154,7 @@ async function run() {
     check('POST /api/auth/register company without companyName -> 400', r.status === 400 && r.body.fields && r.body.fields.companyName && r.body.fields.contactTitle);
 
     console.log('\nAdmin login (seeded account)');
-    r = await request('POST', '/api/auth/login', { email: 'admin@primeeliteventures.example', password: 'AdminPass123!' });
+    r = await request('POST', '/api/auth/login', { email: 'josephmaticha@gmail.com', password: 'AdminPass123!' });
     check('POST /api/auth/login (seeded admin) -> 200, role=admin', r.status === 200 && r.body.user.role === 'admin');
     const adminToken = r.body.token;
     const adminUserId = r.body.user.id;
@@ -574,7 +574,7 @@ async function run() {
     );
 
     console.log('\nPermission system (categories, custom permissions, per-route gating)');
-    r = await request('POST', '/api/auth/login', { email: 'admin@primeeliteventures.example', password: 'AdminPass123!' });
+    r = await request('POST', '/api/auth/login', { email: 'josephmaticha@gmail.com', password: 'AdminPass123!' });
     check('Login response includes permissions array', Array.isArray(r.body.user.permissions) && r.body.user.permissions.length > 0);
 
     r = await request('GET', '/api/admin/staff/categories', null, adminToken);

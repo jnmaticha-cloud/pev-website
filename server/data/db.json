@@ -3,7 +3,7 @@
     {
       "id": "user-seed-admin",
       "name": "Amina Ouma",
-      "email": "admin@primeeliteventures.example",
+      "email": "josephmaticha@gmail.com",
       "passwordHash": "$2a$10$MZLOrQVBA17HuUOt7g48nOzpERciKrfJmNyGxQOYAkEf5VNR2YFe6",
       "role": "admin",
       "companyName": null,
@@ -23,7 +23,7 @@
         "bookings"
       ],
       "bio": "18 years across private equity and public-sector advisory.",
-      "photoUrl": "/uploads/images/1789299867916-971825.jpg",
+      "photoUrl": null,
       "featured": true,
       "createdAt": "2026-01-01T00:00:00.000Z"
     },
@@ -63,7 +63,7 @@
         "bookings"
       ],
       "bio": "Chartered accountant specialising in capital structuring.",
-      "photoUrl": "/uploads/images/1789299799172-61159.jpg",
+      "photoUrl": null,
       "featured": true,
       "createdAt": "2026-01-01T00:00:00.000Z"
     },
@@ -104,7 +104,7 @@
         "reports"
       ],
       "bio": "Runs recruitment, onboarding, and staff records.",
-      "photoUrl": "/uploads/images/1789299832979-115910.jpg",
+      "photoUrl": null,
       "featured": false,
       "createdAt": "2026-01-01T00:00:00.000Z"
     },
@@ -125,9 +125,92 @@
       "role": "company",
       "companyName": "Acme Retail Ltd",
       "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "user-1789379246705",
+      "name": "Client User",
+      "email": "client-1789379246589@example.com",
+      "passwordHash": "$2a$10$I4ok9QnfJDXa8zcEMFpFeu8TFPxhwDNhPoDUg0QQcW0/ACPei1ZyC",
+      "role": "client",
+      "companyName": null,
+      "contactTitle": null,
+      "status": "active",
+      "createdAt": "2026-09-14T09:47:26.705Z"
+    },
+    {
+      "id": "user-1789379247044",
+      "name": "Biz Contact",
+      "email": "company-1789379246950@example.com",
+      "passwordHash": "$2a$10$omCD1Y7NiCy9FSzwCanGYeV2E4pplmoUq/9r3jGfm1WBKIqL4Xx7a",
+      "role": "company",
+      "companyName": "Acme Retail Ltd",
+      "contactTitle": "CFO",
+      "status": "active",
+      "createdAt": "2026-09-14T09:47:27.044Z"
     }
   ],
-  "serviceRequests": [],
+  "serviceRequests": [
+    {
+      "id": "req-1789379247509",
+      "userId": "user-1789379246705",
+      "userName": "Client User",
+      "userRole": "client",
+      "type": "service",
+      "service": "Strategy & Advisory",
+      "details": "Need a market entry plan.",
+      "status": "in_progress",
+      "createdAt": "2026-09-14T09:47:27.509Z",
+      "updatedAt": "2026-09-14T09:47:27.577Z"
+    },
+    {
+      "id": "req-1789379247529",
+      "userId": "user-1789379247044",
+      "userName": "Biz Contact",
+      "userRole": "company",
+      "type": "service",
+      "service": "Financial Structuring",
+      "details": "Need help raising a Series A.",
+      "status": "pending",
+      "createdAt": "2026-09-14T09:47:27.529Z",
+      "updatedAt": "2026-09-14T09:47:27.529Z"
+    },
+    {
+      "id": "req-1789379248799",
+      "userId": "user-1789379246705",
+      "userName": "Client User",
+      "userRole": "client",
+      "type": "service",
+      "service": "Strategy & Advisory",
+      "details": "Notification test request.",
+      "status": "cancelled",
+      "createdAt": "2026-09-14T09:47:28.799Z",
+      "updatedAt": "2026-09-14T09:47:28.868Z"
+    },
+    {
+      "id": "req-1789379249593",
+      "userId": "user-1789379246705",
+      "userName": "Client User",
+      "userRole": "client",
+      "type": "project",
+      "service": "Retail POS Modernisation",
+      "details": "Test project interest.",
+      "status": "completed",
+      "createdAt": "2026-09-14T09:47:29.593Z",
+      "updatedAt": "2026-09-14T09:47:29.740Z"
+    },
+    {
+      "id": "req-1789379249615",
+      "userId": "user-1789379246705",
+      "userName": "Client User",
+      "userRole": "client",
+      "type": "service",
+      "service": "Strategy & Advisory",
+      "details": "Test service interest.",
+      "status": "pending",
+      "createdAt": "2026-09-14T09:47:29.615Z",
+      "updatedAt": "2026-09-14T09:47:29.615Z"
+    }
+  ],
   "services": [
     {
       "id": "svc-strategy",
@@ -200,13 +283,13 @@
       "id": "d1",
       "name": "Grace Wanjiru",
       "role": "Board Chair",
-      "photoUrl": "/uploads/images/1789299962035-290637.jpg"
+      "photoUrl": null
     },
     {
       "id": "d2",
       "name": "Peter Mwangi",
       "role": "Non-Executive Director",
-      "photoUrl": "/uploads/images/1789299984568-48622.JPG"
+      "photoUrl": null
     }
   ],
   "gallery": [
@@ -214,37 +297,37 @@
       "id": "g1",
       "category": "Projects",
       "title": "Nairobi Fintech Rollout",
-      "photoUrl": "/uploads/images/1789300746737-944873.JPG"
+      "photoUrl": null
     },
     {
       "id": "g2",
       "category": "Team",
       "title": "Quarterly Strategy Offsite",
-      "photoUrl": "/uploads/images/1789300756403-463506.JPG"
+      "photoUrl": null
     },
     {
       "id": "g3",
       "category": "Events",
       "title": "Prime Elite Summit 2025",
-      "photoUrl": "/uploads/images/1789300763312-932867.JPG"
+      "photoUrl": null
     },
     {
       "id": "g4",
       "category": "Office",
       "title": "Nairobi HQ, Level 8",
-      "photoUrl": "/uploads/images/1789300775572-94874.JPG"
+      "photoUrl": null
     },
     {
       "id": "g5",
       "category": "Projects",
       "title": "Retail Supply Chain Audit",
-      "photoUrl": "/uploads/images/1789300782982-279203.JPG"
+      "photoUrl": null
     },
     {
       "id": "g6",
       "category": "Events",
       "title": "Client Appreciation Evening",
-      "photoUrl": "/uploads/images/1789300795585-290087.JPG"
+      "photoUrl": null
     }
   ],
   "careers": [
