@@ -823,6 +823,12 @@ async function run() {
 
     r = await request('GET', '/api/does-not-exist');
     check('GET /api/does-not-exist -> 404 (not SPA fallback)', r.status === 404);
+
+    r = await request('GET', '/this-page-does-not-exist');
+    check('GET /random-unknown-path -> 404 (real 404 page, not the homepage)', r.status === 404 && r.raw.includes('404'));
+
+    r = await request('GET', '/services/finance');
+    check('GET /services/finance -> 200 (known dynamic route still works)', r.status === 200);
   } finally {
     server.close();
   }

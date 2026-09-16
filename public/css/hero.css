@@ -30,20 +30,18 @@
 
 .hero .container {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: 1fr 1fr;
   gap: clamp(2rem, 5vw, 4rem);
-  /* Was "center" — with the left column (long headline + stats grid)
-     taller than the fixed-aspect-ratio visual panel on the right, that
-     vertically centered the shorter panel against its taller sibling,
-     leaving an empty gap above it. Aligning both to the top instead
-     lines the visual panel up with the headline's top edge. */
-  align-items: start;
+  /* "stretch" (the default) makes the visual panel's height always
+     exactly match the text column's actual height, whatever that is —
+     self-adjusting, so it never falls short (leaving a gap below) or
+     grows past it (leaving a gap above), on any screen. */
+  align-items: stretch;
 }
 
 .hero-headline {
-  font-size: var(--step-5);
+  font-size: var(--step-4);
   margin-bottom: 0.4em;
-  color: var(--text-primary);
 }
 .hero-headline .word {
   display: inline-block;
@@ -56,14 +54,6 @@
   to { opacity: 1; transform: translateY(0); }
 }
 .hero-headline .accent-word { color: var(--accent); font-style: italic; }
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-headline .word {
-    opacity: 1 !important;
-    transform: none !important;
-    animation: none !important;
-  }
-}
 
 .hero-sub { font-size: var(--step-1); max-width: 46ch; }
 
@@ -94,7 +84,15 @@
 
 .hero-visual {
   position: relative;
-  aspect-ratio: 4/5;
+  width: 100%;
+  /* Was a vh-based height cap — that shrinks on any browser with real
+     toolbar/taskbar chrome eating into the viewport, which is exactly
+     when there's the LEAST room to spare, so the gap below the card
+     got worse rather than better on ordinary browser windows. Filling
+     the grid row's height directly (via align-items: stretch on the
+     parent, see hero.css .hero .container) means this always matches
+     the text column exactly, on any screen, with zero gap either way. */
+  height: 100%;
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--border-hairline);
@@ -162,5 +160,7 @@
 
 @media (max-width: 900px) {
   .hero .container { grid-template-columns: 1fr; }
-  .hero-visual { order: -1; aspect-ratio: 16/10; }
+  /* height (set for desktop, above) and aspect-ratio don't mix — reset
+     to auto so aspect-ratio is the only thing sizing this on mobile. */
+  .hero-visual { order: -1; height: auto; aspect-ratio: 16/10; }
 }

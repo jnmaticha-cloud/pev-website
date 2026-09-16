@@ -63,10 +63,12 @@
   <div class="loader-mark">PEV</div>
 </div>
 
+<div id="scrollProgress" class="scroll-progress" aria-hidden="true"></div>
+
 <!-- ===== Navbar ===== -->
 <header class="navbar">
   <div class="container">
-    <a href="/" class="brand"><span class="mark">PE</span><span class="brand-text"> Prime Elite Ventures</span></a>
+    <a href="/" class="brand"><span class="mark">PEV</span><span class="brand-text"> Prime Elite Ventures</span></a>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Toggle menu">
       <i class="fa-solid fa-bars"></i>
@@ -136,7 +138,7 @@
   <div class="container">
     <div>
       <span class="eyebrow" data-reveal>Advisory · Nairobi &amp; East Africa</span>
-      <h1 class="hero-headline" id="heroHeadline">Transform Your Business with <span class="accent-word">Data-Driven</span> Solutions</h1>
+      <h1 class="hero-headline" id="heroHeadline"></h1>
       <p class="hero-sub" id="heroSub" data-reveal></p>
       <div class="hero-cta-row" data-reveal>
         <a href="#contact" class="btn btn-primary">Get Started Today</a>
@@ -242,6 +244,7 @@
     <button class="lightbox-close" id="lightboxClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
     <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image"><i class="fa-solid fa-chevron-left"></i></button>
     <button class="lightbox-nav next" id="lightboxNext" aria-label="Next image"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="lightbox-media" id="lightboxMedia"></div>
     <span id="lightboxCaption"></span>
   </div>
 </div>
@@ -330,7 +333,11 @@
           <li><i class="fa-solid fa-check"></i> Co-delivery arrangements with complementary advisory firms</li>
         </ul>
       </div>
-      <form class="glass-card" id="partnerForm" novalidate>
+      <div id="partnerFormWrap" class="reveal-form-wrap">
+        <button type="button" class="btn btn-primary reveal-form-trigger" id="partnerFormTrigger" style="width:100%; justify-content:center">
+          Apply to partner with us
+        </button>
+        <form class="glass-card" id="partnerForm" novalidate style="display:none">
         <div class="form-row">
           <label for="pf-name">Full name</label>
           <input type="text" id="pf-name" name="name" required>
@@ -360,6 +367,7 @@
         <button type="submit" class="btn btn-primary" id="partnerSubmit" style="width:100%; justify-content:center">Submit application</button>
         <div class="form-status" id="partnerStatus"></div>
       </form>
+      </div>
     </div>
   </div>
 </section>
@@ -378,7 +386,11 @@
           <li><i class="fa-solid fa-envelope"></i> hello@primeeliteventures.example</li>
         </ul>
       </div>
-      <form class="glass-card" id="contactForm" novalidate>
+      <div id="contactFormWrap" class="reveal-form-wrap">
+        <button type="button" class="btn btn-primary reveal-form-trigger" id="contactFormTrigger" style="width:100%; justify-content:center">
+          Get in touch
+        </button>
+        <form class="glass-card" id="contactForm" novalidate style="display:none">
         <div class="form-row">
           <label for="cf-name">Full name</label>
           <input type="text" id="cf-name" name="name" autocomplete="name" required>
@@ -401,6 +413,7 @@
         <button type="submit" class="btn btn-primary" id="contactSubmit" style="width:100%; justify-content:center">Send message</button>
         <div class="form-status" id="contactStatus"></div>
       </form>
+      </div>
     </div>
   </div>
 </section>
@@ -408,11 +421,15 @@
 </main>
 
 <!-- ===== Footer ===== -->
+<button type="button" id="backToTop" class="back-to-top" aria-label="Back to top">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
 <footer class="site-footer section" style="border-bottom:none">
   <div class="container">
     <div class="footer-top">
       <div class="footer-col">
-        <a href="/" class="brand" style="margin-bottom:1rem; display:inline-flex"><span class="mark">PE</span><span class="brand-text"> Prime Elite Ventures</span></a>
+        <a href="/" class="brand" style="margin-bottom:1rem; display:inline-flex"><span class="mark">PEV</span><span class="brand-text"> Prime Elite Ventures</span></a>
         <p id="footerTagline">Strategy, finance, and operations advisory for ambitious East African businesses.</p>
         <div class="social-row">
           <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>

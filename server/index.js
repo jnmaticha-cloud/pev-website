@@ -30,9 +30,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
-// Check JWT_SECRET in production
+// Refuse to boot in production with the default JWT secret — a leaked or
+// guessed default secret lets anyone forge a valid session for any role,
+// including admin. This check only blocks startup; it doesn't affect dev.
 if (IS_PRODUCTION && (!process.env.JWT_SECRET || process.env.JWT_SECRET === DEV_JWT_SECRET)) {
-  console.log('Notice: Auto-generated random JWT secret active for production.');
+  console.error(
+    '\nFATAL: NODE_ENV=production but JWT_SECRET is unset or still the development default.\n' +
+    'Set a long, random JWT_SECRET environment variable before starting in production.\n' +
+    "Generate one with: node -e \"console.log(require('crypto').randomBytes(48).toString('hex'))\"\n"
+  );
+  process.exit(1);
 }
 
 // CORS: this app serves its own frontend from the same origin as its API,
@@ -108,10 +115,20 @@ app.get('/services/:slug', (req, res) => {
 
 app.use(express.static(path.join(__dirname, '..', 'public'), { extensions: ['html'] }));
 
-// Fallback to index.html for any non-API GET (simple SPA-style routing for /login, /dashboard etc.)
+// Every real top-level page this site actually has. Anything outside this
+// list is a typo'd or dead link and gets a proper 404 page — previously
+// ANY unknown path silently served the homepage with a 200 status, which
+// hides broken links from visitors, analytics, and search engines alike.
+const KNOWN_PAGES = new Set([
+  '/', '/login', '/register', '/dashboard', '/admin', '/portal-client', '/portal-company',
+]);
+
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) return next();
-  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+  if (KNOWN_PAGES.has(req.path)) {
+    return res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+  }
+  res.status(404).sendFile(path.join(__dirname, '..', 'public', '404.html'));
 });
 
 // Central error handler
@@ -121,8 +138,8 @@ app.use((err, req, res, next) => {
 });
 
 if (require.main === module) {
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Prime Elite Ventures server running on port ${PORT}`);
+  app.listen(PORT, () => {
+    console.log(`Prime Elite Ventures server running on http://localhost:${PORT}`);
   });
 }
 

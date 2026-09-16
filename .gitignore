@@ -5,5 +5,4 @@ npm-debug.log*
 *.log
 .DS_Store
 server/uploads/
-public/uploads/files/
-pev-website/
+public/uploads/

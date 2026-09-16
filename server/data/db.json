@@ -127,88 +127,88 @@
       "createdAt": "2026-01-01T00:00:00.000Z"
     },
     {
-      "id": "user-1789379246705",
+      "id": "user-1789557014298",
       "name": "Client User",
-      "email": "client-1789379246589@example.com",
-      "passwordHash": "$2a$10$I4ok9QnfJDXa8zcEMFpFeu8TFPxhwDNhPoDUg0QQcW0/ACPei1ZyC",
+      "email": "client-1789557014094@example.com",
+      "passwordHash": "$2a$10$jGY77FrEcFmWaalzGURhIe1c0UHiF5DwMpOyHNNO3.nHZ25Q3mZMS",
       "role": "client",
       "companyName": null,
       "contactTitle": null,
       "status": "active",
-      "createdAt": "2026-09-14T09:47:26.705Z"
+      "createdAt": "2026-09-16T11:10:14.298Z"
     },
     {
-      "id": "user-1789379247044",
+      "id": "user-1789557014746",
       "name": "Biz Contact",
-      "email": "company-1789379246950@example.com",
-      "passwordHash": "$2a$10$omCD1Y7NiCy9FSzwCanGYeV2E4pplmoUq/9r3jGfm1WBKIqL4Xx7a",
+      "email": "company-1789557014629@example.com",
+      "passwordHash": "$2a$10$jAsemaHTRR/9Xjl7O.wlyOkbVpQBgRwizsVLI78rPclq3L2YJ9A26",
       "role": "company",
       "companyName": "Acme Retail Ltd",
       "contactTitle": "CFO",
       "status": "active",
-      "createdAt": "2026-09-14T09:47:27.044Z"
+      "createdAt": "2026-09-16T11:10:14.746Z"
     }
   ],
   "serviceRequests": [
     {
-      "id": "req-1789379247509",
-      "userId": "user-1789379246705",
+      "id": "req-1789557015221",
+      "userId": "user-1789557014298",
       "userName": "Client User",
       "userRole": "client",
       "type": "service",
       "service": "Strategy & Advisory",
       "details": "Need a market entry plan.",
       "status": "in_progress",
-      "createdAt": "2026-09-14T09:47:27.509Z",
-      "updatedAt": "2026-09-14T09:47:27.577Z"
+      "createdAt": "2026-09-16T11:10:15.221Z",
+      "updatedAt": "2026-09-16T11:10:15.292Z"
     },
     {
-      "id": "req-1789379247529",
-      "userId": "user-1789379247044",
+      "id": "req-1789557015242",
+      "userId": "user-1789557014746",
       "userName": "Biz Contact",
       "userRole": "company",
       "type": "service",
       "service": "Financial Structuring",
       "details": "Need help raising a Series A.",
       "status": "pending",
-      "createdAt": "2026-09-14T09:47:27.529Z",
-      "updatedAt": "2026-09-14T09:47:27.529Z"
+      "createdAt": "2026-09-16T11:10:15.242Z",
+      "updatedAt": "2026-09-16T11:10:15.242Z"
     },
     {
-      "id": "req-1789379248799",
-      "userId": "user-1789379246705",
+      "id": "req-1789557017061",
+      "userId": "user-1789557014298",
       "userName": "Client User",
       "userRole": "client",
       "type": "service",
       "service": "Strategy & Advisory",
       "details": "Notification test request.",
       "status": "cancelled",
-      "createdAt": "2026-09-14T09:47:28.799Z",
-      "updatedAt": "2026-09-14T09:47:28.868Z"
+      "createdAt": "2026-09-16T11:10:17.061Z",
+      "updatedAt": "2026-09-16T11:10:17.190Z"
     },
     {
-      "id": "req-1789379249593",
-      "userId": "user-1789379246705",
+      "id": "req-1789557018581",
+      "userId": "user-1789557014298",
       "userName": "Client User",
       "userRole": "client",
       "type": "project",
       "service": "Retail POS Modernisation",
       "details": "Test project interest.",
       "status": "completed",
-      "createdAt": "2026-09-14T09:47:29.593Z",
-      "updatedAt": "2026-09-14T09:47:29.740Z"
+      "createdAt": "2026-09-16T11:10:18.582Z",
+      "updatedAt": "2026-09-16T11:10:18.823Z"
     },
     {
-      "id": "req-1789379249615",
-      "userId": "user-1789379246705",
+      "id": "req-1789557018611",
+      "userId": "user-1789557014298",
       "userName": "Client User",
       "userRole": "client",
       "type": "service",
       "service": "Strategy & Advisory",
       "details": "Test service interest.",
       "status": "pending",
-      "createdAt": "2026-09-14T09:47:29.615Z",
-      "updatedAt": "2026-09-14T09:47:29.615Z"
+      "createdAt": "2026-09-16T11:10:18.611Z",
+      "updatedAt": "2026-09-16T11:10:18.611Z"
     }
   ],
   "services": [
@@ -303,31 +303,31 @@
       "id": "g2",
       "category": "Team",
       "title": "Quarterly Strategy Offsite",
-      "photoUrl": null
+      "photoUrl": "/uploads/images/1789556743935-956150.JPG"
     },
     {
       "id": "g3",
       "category": "Events",
       "title": "Prime Elite Summit 2025",
-      "photoUrl": null
+      "photoUrl": "/uploads/images/1789556749854-876331.JPG"
     },
     {
       "id": "g4",
       "category": "Office",
       "title": "Nairobi HQ, Level 8",
-      "photoUrl": null
+      "photoUrl": "/uploads/images/1789556757979-66512.JPG"
     },
     {
       "id": "g5",
       "category": "Projects",
       "title": "Retail Supply Chain Audit",
-      "photoUrl": null
+      "photoUrl": "/uploads/images/1789557087053-568009.JPG"
     },
     {
       "id": "g6",
       "category": "Events",
       "title": "Client Appreciation Evening",
-      "photoUrl": null
+      "photoUrl": "/uploads/images/1789557096467-26095.JPG"
     }
   ],
   "careers": [
@@ -397,12 +397,194 @@
       "linkUrl": null
     }
   ],
-  "applications": [],
-  "emailRequests": [],
-  "partnerApplications": [],
-  "bookings": [],
-  "invoices": [],
-  "notifications": [],
+  "applications": [
+    {
+      "id": "app-1789557015500",
+      "jobId": "c3",
+      "jobTitle": "Frontend Engineer",
+      "name": "Alice React",
+      "email": "alice-test@example.com",
+      "phone": null,
+      "yearsExperience": 6,
+      "education": "bachelors",
+      "coverMessage": "I have 6 years with react, javascript, css, html, very frontend focused.",
+      "resumeStoredName": "resume-1789557015490-21162.pdf",
+      "resumeOriginalName": "resume.pdf",
+      "autoScore": 84,
+      "adminScore": null,
+      "status": "new",
+      "createdAt": "2026-09-16T11:10:15.500Z"
+    },
+    {
+      "id": "app-1789557015521",
+      "jobId": "c3",
+      "jobTitle": "Frontend Engineer",
+      "name": "Bob Newcomer",
+      "email": "bob-test@example.com",
+      "phone": null,
+      "yearsExperience": 0,
+      "education": "high_school",
+      "coverMessage": "Looking to switch careers into tech, no direct experience yet.",
+      "resumeStoredName": "resume-1789557015517-889604.pdf",
+      "resumeOriginalName": "resume.pdf",
+      "autoScore": 10,
+      "adminScore": 90,
+      "status": "shortlisted",
+      "createdAt": "2026-09-16T11:10:15.521Z"
+    },
+    {
+      "id": "app-1789557017238",
+      "jobId": "c1",
+      "jobTitle": "Senior Strategy Consultant",
+      "name": "Notify Test Applicant",
+      "email": "notifytest@example.com",
+      "phone": null,
+      "yearsExperience": 2,
+      "education": "diploma",
+      "coverMessage": "Testing notification behaviour.",
+      "resumeStoredName": "resume-1789557017229-701324.pdf",
+      "resumeOriginalName": "resume.pdf",
+      "autoScore": 23,
+      "adminScore": 60,
+      "status": "rejected",
+      "createdAt": "2026-09-16T11:10:17.238Z"
+    }
+  ],
+  "emailRequests": [
+    {
+      "id": "mail-1789557016911",
+      "userId": "user-1789557014298",
+      "userName": "Client User",
+      "userEmail": "client-1789557014094@example.com",
+      "userRole": "client",
+      "requestedAddress": "test@primeeliteventures.example",
+      "reason": "Need it for client correspondence.",
+      "status": "approved",
+      "adminNote": "Provisioned.",
+      "createdAt": "2026-09-16T11:10:16.911Z",
+      "updatedAt": "2026-09-16T11:10:16.966Z"
+    }
+  ],
+  "partnerApplications": [
+    {
+      "id": "partner-1789557018709",
+      "name": "Test Partner",
+      "email": "testpartner@example.com",
+      "phone": null,
+      "organization": "TestCo",
+      "partnershipType": "Referral partner",
+      "message": "We would like to partner.",
+      "status": "approved",
+      "adminNote": "Good fit.",
+      "createdAt": "2026-09-16T11:10:18.709Z",
+      "updatedAt": "2026-09-16T11:10:18.768Z"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "booking-1789557018971",
+      "userId": "user-1789557014298",
+      "userName": "Client User",
+      "userRole": "client",
+      "topic": "Discuss Q4 roadmap",
+      "preferredDate": "2026-11-01",
+      "preferredTime": "14:00",
+      "notes": "Video call preferred.",
+      "status": "confirmed",
+      "createdAt": "2026-09-16T11:10:18.971Z",
+      "updatedAt": "2026-09-16T11:10:19.463Z"
+    }
+  ],
+  "invoices": [
+    {
+      "id": "inv-1789557019579",
+      "invoiceNumber": "INV-2026-0001",
+      "userId": "user-1789557014298",
+      "userName": "Client User",
+      "description": "Test retainer",
+      "amount": 1500,
+      "currency": "USD",
+      "status": "paid",
+      "issueDate": "2026-09-16T11:10:19.579Z",
+      "dueDate": "2026-12-01",
+      "createdAt": "2026-09-16T11:10:19.579Z",
+      "updatedAt": "2026-09-16T11:10:19.780Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif-1789557015115-225553",
+      "userId": "user-1789557014746",
+      "title": "Your Prime Elite Ventures company account has been approved",
+      "body": "Hi Biz Contact,\n\nGood news — your company account for Acme Retail Ltd has been approved. You can now log in and start submitting requests.\n\n— Prime Elite Ventures",
+      "link": null,
+      "read": false,
+      "createdAt": "2026-09-16T11:10:15.115Z"
+    },
+    {
+      "id": "notif-1789557015308-605082",
+      "userId": "user-1789557014298",
+      "title": "Update on your service request: Strategy & Advisory",
+      "body": "Hi Client User,\n\nYour request for \"Strategy & Advisory\" has been now in progress.\n\nYou can view the latest status any time by logging into your portal.\n\n— Prime Elite Ventures",
+      "link": null,
+      "read": true,
+      "createdAt": "2026-09-16T11:10:15.308Z"
+    },
+    {
+      "id": "notif-1789557016997-701097",
+      "userId": "user-1789557014298",
+      "title": "Your official email request has been approved",
+      "body": "Hi Client User,\n\nYour request for an official Prime Elite Ventures mailbox (test@primeeliteventures.example) has been approved.\n\nNote from our team: Provisioned.\n\n— Prime Elite Ventures",
+      "link": null,
+      "read": true,
+      "createdAt": "2026-09-16T11:10:16.997Z"
+    },
+    {
+      "id": "notif-1789557017134-359409",
+      "userId": "user-1789557014298",
+      "title": "Update on your service request: Strategy & Advisory",
+      "body": "Hi Client User,\n\nYour request for \"Strategy & Advisory\" has been cancelled.\n\nYou can view the latest status any time by logging into your portal.\n\n— Prime Elite Ventures",
+      "link": null,
+      "read": true,
+      "createdAt": "2026-09-16T11:10:17.134Z"
+    },
+    {
+      "id": "notif-1789557018845-526526",
+      "userId": "user-1789557014298",
+      "title": "Update on your service request: Retail POS Modernisation",
+      "body": "Hi Client User,\n\nYour request for \"Retail POS Modernisation\" has been marked as completed.\n\nYou can view the latest status any time by logging into your portal.\n\n— Prime Elite Ventures",
+      "link": null,
+      "read": true,
+      "createdAt": "2026-09-16T11:10:18.845Z"
+    },
+    {
+      "id": "notif-1789557019501-173607",
+      "userId": "user-1789557014298",
+      "title": "Your consultation booking is confirmed",
+      "body": "Hi Client User,\n\nYour booking for \"Discuss Q4 roadmap\" (preferred date: 2026-11-01 at 14:00) has been confirmed.\n\n— Prime Elite Ventures",
+      "link": null,
+      "read": false,
+      "createdAt": "2026-09-16T11:10:19.501Z"
+    },
+    {
+      "id": "notif-1789557019669-655975",
+      "userId": "user-1789557014298",
+      "title": "New invoice INV-2026-0001: USD 1500",
+      "body": "Hi Client User,\n\nA new invoice has been issued: INV-2026-0001 for USD 1500 — Test retainer.\nDue date: 11/30/2026.\n\nYou can view it any time from your portal.\n\n— Prime Elite Ventures",
+      "link": null,
+      "read": false,
+      "createdAt": "2026-09-16T11:10:19.669Z"
+    },
+    {
+      "id": "notif-1789557019804-447215",
+      "userId": "user-1789557014298",
+      "title": "Invoice INV-2026-0001 marked as paid",
+      "body": "Hi Client User,\n\nThank you — invoice INV-2026-0001 has been marked as paid.\n\n— Prime Elite Ventures",
+      "link": null,
+      "read": false,
+      "createdAt": "2026-09-16T11:10:19.804Z"
+    }
+  ],
   "settings": {
     "address": "Britam Tower, Level 8, Upper Hill, Nairobi",
     "phone": "+254 700 999 888",
@@ -470,7 +652,16 @@
       "description": "Every engagement closes with a written playbook your team owns after we leave."
     }
   ],
-  "contactMessages": [],
+  "contactMessages": [
+    {
+      "id": "msg-1789557014041",
+      "name": "Test User",
+      "email": "test@example.com",
+      "phone": null,
+      "message": "Hello there",
+      "receivedAt": "2026-09-16T11:10:14.041Z"
+    }
+  ],
   "announcements": [
     {
       "id": "ann-seed-1",

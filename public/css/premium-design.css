@@ -21,11 +21,37 @@
 }
 
 /* ===== About / Core Values ===== */
+#coreValuesGrid.grid-2 {
+  /* .about-grid > * (below) forces display:flex on every direct child
+     to center shorter content vertically — necessary for the plain text
+     column, but it was overriding this element's own display:grid from
+     the shared .grid class, silently collapsing it to a single flex
+     column (four cards stacked full-width) instead of the intended 2x2.
+     That extra height was the actual reason this side needed so much
+     more vertical space than the text column next to it. Restoring
+     display:grid here (and centering the grid as a block, the grid
+     equivalent of the flex centering) fixes both at once. */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: center;
+}
+@media (max-width: 480px) {
+  #coreValuesGrid.grid-2 { grid-template-columns: 1fr; }
+}
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(2rem, 5vw, 4rem);
-  align-items: start;
+  /* Was "start" — with a form or a longer list on one side, the shorter
+     side just sat at the top of the row with dead space below it.
+     "stretch" (the grid default) plus centering each side's own content
+     (below) fills that space by centering instead of orphaning it. */
+  align-items: stretch;
+}
+.about-grid > * {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .about-copy p { font-size: var(--step-0); }
 .about-stats {
@@ -53,6 +79,55 @@
   margin-bottom: 0.75rem;
 }
 
+/* ===== Scroll progress ===== */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  z-index: 101; /* above the navbar (100) so it stays visible while scrolling */
+  transition: width 80ms linear;
+}
+
+/* ===== Back to top ===== */
+.back-to-top {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 40;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-hairline);
+  color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 250ms ease, transform 250ms ease, visibility 250ms ease, border-color 200ms ease, color 200ms ease;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+}
+.back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.back-to-top:hover { border-color: var(--accent); color: var(--accent); }
+@media (max-width: 720px) {
+  .back-to-top { right: 1rem; bottom: 1rem; width: 40px; height: 40px; }
+}
+
+/* ===== Progressive disclosure ("Show more") ===== */
+.show-more-wrap { display: flex; justify-content: center; margin-top: 2rem; }
+.show-more-btn { padding-left: 1.75rem; padding-right: 1.75rem; }
+
+/* ===== Reveal-on-click forms (Partner application, Get in touch) ===== */
+.reveal-form-wrap { width: 100%; }
+.reveal-form-wrap form {
+  animation: reveal-form-in 350ms ease;
+}
+@keyframes reveal-form-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 /* ===== Services ===== */
 .service-card {
   display: flex;
@@ -154,7 +229,25 @@
   display: flex; align-items: center; justify-content: center;
   color: var(--text-muted); font-family: var(--font-mono);
   border: 1px solid var(--border-hairline);
+  overflow: hidden;
 }
+.lightbox-media { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.lightbox-media img { width: 100%; height: 100%; object-fit: contain; background: var(--ink-900); }
+.lightbox-media .lightbox-empty {
+  display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+  color: var(--text-muted); text-align: center; padding: 2rem;
+}
+.lightbox-media .lightbox-empty i { font-size: 1.5rem; opacity: 0.6; }
+#lightboxCaption {
+  position: absolute; left: 1rem; right: 1rem; bottom: 1rem;
+  z-index: 1;
+  background: rgba(11,18,32,0.65);
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-sm, 8px);
+  font-size: var(--step--1);
+  color: var(--paper-50);
+}
+#lightboxCaption:empty { display: none; }
 .lightbox-close, .lightbox-nav {
   position: absolute;
   background: rgba(11,18,32,0.7);
@@ -208,6 +301,12 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(2rem, 5vw, 4rem);
+  align-items: stretch;
+}
+.careers-layout > * {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .why-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.9rem; }
 .why-list li {
@@ -227,6 +326,12 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(2rem, 5vw, 4rem);
+  align-items: stretch;
+}
+.contact-grid > * {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .form-row { display: grid; gap: 0.4rem; margin-bottom: 1.1rem; }
 .form-row label { font-size: var(--step--1); color: var(--text-secondary); }

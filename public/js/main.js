@@ -16,7 +16,52 @@
     initSiteSettings();
     initAboutAndFooter();
     document.getElementById('year').textContent = new Date().getFullYear();
+    initBackToTop();
+    initScrollProgress();
+    initRevealForms();
   });
+
+  // Forms that start collapsed behind a single button (Partner application,
+  // Get in touch) so those sections don't take up a screen's worth of space
+  // before anyone's actually decided they want to fill something in.
+  function initRevealForms() {
+    [
+      ['partnerFormTrigger', 'partnerForm'],
+      ['contactFormTrigger', 'contactForm'],
+    ].forEach(([triggerId, formId]) => {
+      const trigger = document.getElementById(triggerId);
+      const form = document.getElementById(formId);
+      if (!trigger || !form) return;
+      trigger.addEventListener('click', () => {
+        trigger.style.display = 'none';
+        form.style.display = '';
+        const firstField = form.querySelector('input, textarea, select');
+        if (firstField) firstField.focus();
+      });
+    });
+  }
+
+  function initScrollProgress() {
+    const bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+    function update() {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+      bar.style.width = Math.min(100, Math.max(0, pct)) + '%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+
+  function initBackToTop() {
+    const btn = document.getElementById('backToTop');
+    if (!btn) return;
+    window.addEventListener('scroll', () => {
+      btn.classList.toggle('visible', window.scrollY > window.innerHeight * 0.8);
+    });
+    btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
 
   /* ---------- Hero (rotating headline) ---------- */
   async function initHeroHeadline() {
@@ -46,10 +91,6 @@
         span.className = 'word' + (isAccent ? ' accent-word' : '');
         if (animate) {
           span.style.animationDelay = (i * 120) + 'ms';
-          setTimeout(() => {
-            span.style.opacity = '1';
-            span.style.transform = 'none';
-          }, (i * 120) + 750);
         } else {
           // No animation on rotation — but the base CSS rule for .word
           // starts at opacity:0 (so the *first* render can animate in via
@@ -398,6 +439,33 @@
     return card;
   }
 
+  // Reusable progressive-disclosure helper: once a grid has more than
+  // `visibleCount` items, hide the rest behind a "Show more" button
+  // instead of letting the section grow indefinitely as content is
+  // added. Items stay in the DOM (just visually hidden), so nothing is
+  // removed from the page for search engines or accessibility tools —
+  // this only affects what's shown by default.
+  function applyShowMore(grid, visibleCount) {
+    const items = Array.from(grid.children);
+    if (items.length <= visibleCount) return;
+
+    items.slice(visibleCount).forEach((item) => {
+      item.style.display = 'none';
+    });
+
+    const btnWrap = document.createElement('div');
+    btnWrap.className = 'show-more-wrap';
+    btnWrap.innerHTML = `<button type="button" class="btn btn-ghost show-more-btn">Show ${items.length - visibleCount} more</button>`;
+    grid.after(btnWrap);
+
+    btnWrap.querySelector('button').addEventListener('click', (e) => {
+      items.slice(visibleCount).forEach((item) => { item.style.display = ''; });
+      initScrollReveal(); // newly-shown cards use the same scroll-reveal treatment
+      btnWrap.remove();
+      e.target.blur();
+    });
+  }
+
   async function initServices() {
     const grid = document.getElementById('servicesGrid');
     if (!grid) return;
@@ -411,6 +479,7 @@
       });
       initScrollReveal();
       scrollToHashTarget();
+      applyShowMore(grid, 6); // keeps the section to two tidy rows until asked to expand
     } catch (e) {
       grid.innerHTML = '<p>Services are temporarily unavailable. Please try again shortly.</p>';
       console.error('Failed to load services', e);
@@ -583,8 +652,16 @@
   }
   function renderLightbox() {
     const item = galleryItems[lightboxIndex];
+    const media = document.getElementById('lightboxMedia');
     const caption = document.getElementById('lightboxCaption');
-    if (item && caption) caption.textContent = `${item.title} — ${item.category}`;
+    if (!item) return;
+
+    if (media) {
+      media.innerHTML = item.photoUrl
+        ? `<img src="${escapeAttr(item.photoUrl)}" alt="${escapeAttr(item.title)}">`
+        : `<div class="lightbox-empty"><i class="fa-solid fa-image"></i><span>No photo uploaded yet for this item</span></div>`;
+    }
+    if (caption) caption.textContent = `${item.title} — ${item.category}`;
   }
 
   /* ---------- Team ---------- */
@@ -596,6 +673,7 @@
         const team = await window.PEVApi.getTeam();
         teamGrid.innerHTML = '';
         team.forEach((p) => teamGrid.appendChild(personCard(p)));
+        applyShowMore(teamGrid, 8);
       } catch (e) {
         teamGrid.innerHTML = '<p>Team information is temporarily unavailable.</p>';
       }
@@ -722,6 +800,7 @@
 
         grid.appendChild(card);
       });
+      applyShowMore(grid, 5);
     } catch (e) {
       grid.innerHTML = '<p>Openings are temporarily unavailable.</p>';
     }

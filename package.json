@@ -2,14 +2,10 @@
   "name": "prime-elite-ventures",
   "version": "1.0.0",
   "description": "Prime Elite Ventures corporate website - full stack",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
-    "build": "echo 'Build complete'",
-    "start": "node index.js",
+    "start": "node server/index.js",
     "test": "node server/test.js"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
