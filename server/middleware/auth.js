@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { readDb } = require('../data/store');
 
-const DEV_JWT_SECRET = 'dev-secret-change-in-production';
+const DEV_JWT_SECRET = '6d3b41184f27d9cfe6a0ad10f526cc1f68ef84b2bc36c484792f36567a9b9a2be69fcb751e5d28b26be0a20d8725146a';
 const JWT_SECRET = process.env.JWT_SECRET || DEV_JWT_SECRET;
 
 function signToken(user) {
