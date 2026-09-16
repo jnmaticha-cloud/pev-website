@@ -88,7 +88,13 @@ function check(label, condition) {
   }
 }
 
+const fs = require('fs');
+const path = require('path');
+const dbPath = path.resolve(__dirname, 'data', 'db.json');
+
 async function run() {
+  const originalDb = fs.existsSync(dbPath) ? fs.readFileSync(dbPath, 'utf8') : null;
+
   console.log('Starting server for tests on port', PORT, '...');
   await new Promise((resolve) => {
     server = app.listen(PORT, resolve);
@@ -831,6 +837,9 @@ async function run() {
     check('GET /services/finance -> 200 (known dynamic route still works)', r.status === 200);
   } finally {
     server.close();
+    if (originalDb !== null) {
+      fs.writeFileSync(dbPath, originalDb, 'utf8');
+    }
   }
 
   console.log(`\n${passed} passed, ${failed} failed`);
